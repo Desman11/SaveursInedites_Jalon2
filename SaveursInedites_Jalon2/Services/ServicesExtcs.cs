@@ -5,13 +5,7 @@
         public static void AddBll(this IServiceCollection services)
         {
             services.AddTransient<ISaveursService, SaveursService>();
-         
-        
+            services.AddTransient<IJwtTokenService, JwtTokenService>();
         }
     }
 }
-
-
-
-
-
