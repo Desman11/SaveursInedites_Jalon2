@@ -1,4 +1,5 @@
-﻿namespace SaveursInedites_Jalon2.Services
+﻿
+namespace SaveursInedites_Jalon2.Services
 {
     public static class ServicesExt
     {

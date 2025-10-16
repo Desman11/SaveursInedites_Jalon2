@@ -143,5 +143,22 @@ namespace SaveursInedites_Jalon2.Controllers
             var success = await _saveursService.DeleteRecetteAsync(id);
             return success ? NoContent() : NotFound();
         }
+
+
+        [HttpGet("{idRecette}/ingredients")]
+        public async Task<IActionResult> GetIngredientsByRecetteId([FromRoute] int idRecette)
+        {
+            var ingredients = await _saveursService.GetIngredientsByRecetteIdAsync(idRecette);
+            if (ingredients is null || !ingredients.Any())
+                return NotFound();
+            IEnumerable<IngredientRecetteDTO> response = ingredients.Select(i => new IngredientDTO()
+            {
+                Id = i.Id,
+                Nom = i.Nom,
+            });
+            return Ok(response);
+        }
+
+        [HttpPost("{idRecette}/ingredients/")]
     }
 }

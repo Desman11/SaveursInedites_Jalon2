@@ -1,13 +1,11 @@
 ﻿using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using SaveursInedites_Jalon2.Domain;
-using SaveursInedites_Jalon2.Services;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using SaveursInedites_Jalon2.Domain;
 
-
-namespace WebApplication1.Services
+namespace SaveursInedites_Jalon2.Services
 {
     /// <summary>
     /// Service responsable de la génération des tokens JWT pour l'authentification et l'autorisation.

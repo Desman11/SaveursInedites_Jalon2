@@ -1,5 +1,6 @@
 ﻿using SaveursInedites_Jalon2.DataAccessLayer.Repositories.Recettes;
 using SaveursInedites_Jalon2.DataAccessLayer.Repositories.Utilisateurs;
+using SaveursInedites_Jalon2.DataAccessLayer.Repositories.Ingredients;
 
 namespace SaveursInedites_Jalon2.DataAccessLayer.Repositories
 {
@@ -9,6 +10,7 @@ namespace SaveursInedites_Jalon2.DataAccessLayer.Repositories
         {
             services.AddTransient<IRecetteRepository, RecetteRepository>();
             services.AddTransient<UtilisateurRepository, UtilisateurRepository>();
+            services.AddTransient<IIngredientsRepository, IngredientsRepository>();
         }
     }
 }

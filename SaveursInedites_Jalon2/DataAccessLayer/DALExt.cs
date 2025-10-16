@@ -1,5 +1,6 @@
 ﻿using SaveursInedites_Jalon2.DataAccessLayer.Repositories.Utilisateurs;
 using SaveursInedites_Jalon2.DataAccessLayer.Repositories.Recettes;
+using SaveursInedites_Jalon2.DataAccessLayer.Repositories.Ingredients;
 using SaveursInedites_Jalon2.DataAccessLayer.Session;
 using SaveursInedites_Jalon2.DataAccessLayer.Session.MariaDB;
 using SaveursInedites_Jalon2.DataAccessLayer.Session.MySQL;
@@ -30,6 +31,7 @@ namespace SaveursInedites_Jalon2.DataAccessLayer
             services.AddScoped<IUoW, UoW>();
             services.AddTransient<IRecetteRepository, RecetteRepository>();
             services.AddTransient<IUtilisateurRepository, UtilisateurRepository>();
+            services.AddTransient<IIngredientsRepository, IngredientsRepository>();
         }
     }
 }

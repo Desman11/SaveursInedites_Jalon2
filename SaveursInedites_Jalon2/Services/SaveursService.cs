@@ -70,6 +70,43 @@ namespace SaveursInedites_Jalon2.Services
 
         #endregion Gestion des auteurs
 
-     
+        #region Gestion des ingredients
+
+        public async Task<IEnumerable<Ingredients>> GetAllIngredientsAsync()
+        {
+            return await _UoW.Ingredients.GetAllAsync();
+        }
+
+        public async Task<Ingredients> GetIngredientByIdAsync(int id)
+        {
+            return await _UoW.Ingredients.GetAsync(id);
+        }
+
+        public async Task<Ingredients> AddIngredientAsync(Ingredients newIngredients)
+        {
+            return await _UoW.Ingredients.CreateAsync(newIngredients);
+        }
+
+        public async Task<Ingredients> ModifyIngredientAsync(Ingredients updateIngredient)
+        {
+            return await _UoW.Ingredients.ModifyAsync(updateIngredients);
+        }
+
+        public async Task<IEnumerable<Ingredients>> AddIngredientsAsync(Ingredients newIngredients)
+        {
+            return await _UoW.Ingredients.CreateAsync(newIngredients);
+        }
+
+        public async Task<Ingredients> ModifyIngredientsAsync(Ingredients updateIngredients)
+        {
+            return await _UoW.Ingredients.ModifyAsync(updateIngredients);
+        }
+
+        public async Task<bool> DeleteIngredientAsync(int id)
+        {
+            return await _UoW.Ingredients.DeleteAsync(id);
+        }
+
+        #endregion Gestion des ingredients
     }
 }

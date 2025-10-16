@@ -1,0 +1,57 @@
+docker run --name test -d `
+  -e POSTGRES_PASSWORD=password `
+  -e POSTGRES_USER=postgres `
+  -e POSTGRES_DB=postgres `
+  -p 5435:5432 `
+  -v mydbdata: DockerVolumes/var/lib/postgresql/data `
+  postgres
+  
+  docker run --name Postgres1 -d `
+  -e POSTGRES_PASSWORD=password `
+  -e POSTGRES_USER=postgres `
+  -p 5435:5432 `
+  -v C:\DockerVolumes\postgres1:/var/lib/postgresql/data `
+  postgres:17.6
+
+
+
+docker volume create postgres1data
+docker run --name Postgres1 -d `
+  --restart always `
+  -e POSTGRES_PASSWORD=password `
+  -e POSTGRES_USER=postgres `
+  -e POSTGRES_DB=postgres `
+  -p 5435:5432 `
+  -v postgres1data:/var/lib/postgresql/data `
+  postgres
+  
+  
+  docker volume create postgres1data
+
+docker run --name Postgres1 -d `
+  --restart always `
+  -e POSTGRES_PASSWORD=password `
+  -e POSTGRES_USER=postgres `
+  -e POSTGRES_DB=postgres `
+  -p 5435:5432 `
+  -v postgres1data:/var/lib/postgresql/data `
+  postgres
+  
+  docker volume create postgresdata
+
+docker run --name Postgres1-container -d `
+  --restart always `
+  -e POSTGRES_PASSWORD=password `
+  -e POSTGRES_USER=postgres `
+  -e POSTGRES_DB=postgres `
+  -p 5435:5432 `
+  -v postgresdata:/var/lib/postgresql/data `
+  postgres
+
+docker ps
+
+  
+  docker cp Postgres1-container:/var/lib/postgresql/data C:\DockerVolumes\postgres
+
+
+

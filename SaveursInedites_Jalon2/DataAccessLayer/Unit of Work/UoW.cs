@@ -2,6 +2,7 @@
 using System.Transactions;
 using SaveursInedites_Jalon2.DataAccessLayer.Repositories.Utilisateurs;
 using SaveursInedites_Jalon2.DataAccessLayer.Repositories.Recettes;
+using SaveursInedites_Jalon2.DataAccessLayer.Repositories.Ingredients;
 using SaveursInedites_Jalon2.DataAccessLayer.Session;
 
 namespace SaveursInedites_Jalon2.DataAccessLayer.Unit_of_Work
@@ -11,12 +12,14 @@ namespace SaveursInedites_Jalon2.DataAccessLayer.Unit_of_Work
         private readonly IDBSession _dbSession;
         private readonly Lazy<IUtilisateurRepository> _utilisateurs;
         private readonly Lazy<IRecetteRepository> _recettes;
+        private readonly Lazy<IIngredientsRepository> _ingredients;
 
         public UoW(IDBSession dbSession, IServiceProvider serviceProvider)
         {
             _dbSession = dbSession;
             _utilisateurs = new Lazy<IUtilisateurRepository>(() => serviceProvider.GetRequiredService<IUtilisateurRepository>());
             _recettes = new Lazy<IRecetteRepository>(() => serviceProvider.GetRequiredService<IRecetteRepository>());
+            _ingredients = new Lazy<IIngredientsRepository>(() => serviceProvider.GetRequiredService<IIngredientsRepository>());    
         }
 
         #region Repositories
@@ -24,9 +27,11 @@ namespace SaveursInedites_Jalon2.DataAccessLayer.Unit_of_Work
         // ATTENTION : Les repositories doivent utiliser la transaction en cours dans
         // les requêtes Dapper
 
-        public IUtilisateurRepository Utilisateurs => _utilisateurs.Value;
+        public IUtilisateurRepository Utilisateur => _utilisateurs.Value;
 
-        public IRecetteRepository Recettes => _recettes.Value;
+        public IRecetteRepository Recette => _recettes.Value;
+
+        public IIngredientsRepository Ingredients => _ingredients.Value;
 
         #endregion Repositories
 
