@@ -1,5 +1,4 @@
-﻿//test
-using FluentValidation;
+﻿using FluentValidation;
 
 namespace SaveursInedites_Jalon2.Domain
 {
