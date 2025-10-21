@@ -26,13 +26,23 @@ namespace SaveursInedites_Jalon2.Services
 
         #region Ingredients
 
-        Task<IEnumerable<Ingredients>> GetAllIngredientsAsync();
-        Task<Ingredients> GetIngredientByIdAsync(int id);
-        Task<Ingredients> AddIngredientAsync(Ingredients newIngredient);
-        Task<Ingredients> ModifyIngredientAsync(Ingredients updateIngredient);
+        Task<IEnumerable<Ingredient>> GetAllIngredientsAsync();
+        Task<Ingredient> GetIngredientByIdAsync(int id);
+        Task<Ingredient> AddIngredientAsync(Ingredient newIngredient);
+        Task<Ingredient> ModifyIngredientAsync(Ingredient updateIngredient);
         Task<bool> DeleteIngredientAsync(int id);
 
         #endregion Ingredients
+
+        #region Relations Recettes - Ingredients
+
+        Task<bool> AddRecetteIngredientRelationshipAsync(int idIngredient, int idRecette);
+        Task<bool> RemoveRecetteIngredientRelationshipAsync(int idIngredient, int idRecette);
+        Task<IEnumerable<Recette>> GetRecettesByIdIngredientAsync(int idIngredient);
+        Task<bool> DeleteRecetteRelationsAsync(int idRecette);
+
+        #endregion Relations Recettes - Ingredients
+
     }
 }
 

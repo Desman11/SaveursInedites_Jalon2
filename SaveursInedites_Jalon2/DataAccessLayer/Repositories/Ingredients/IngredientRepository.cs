@@ -5,12 +5,12 @@ using SaveursInedites_Jalon2.Domain.BO;
 
 namespace SaveursInedites_Jalon2.DataAccessLayer.Repositories.Ingredients
 {
-    public class IngredientsRepository : IIngredientsRepository
+    public class IngredientRepository : IIngredientRepository
     {
         const string INGREDIENTS_TABLE = "ingredients";
         readonly IDBSession _dbSession;
 
-        public IngredientsRepository(IDBSession dbSession)
+        public IngredientRepository(IDBSession dbSession)
         {
             _dbSession = dbSession;
         }

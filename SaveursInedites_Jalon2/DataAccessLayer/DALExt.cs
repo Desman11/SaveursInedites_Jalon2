@@ -31,7 +31,7 @@ namespace SaveursInedites_Jalon2.DataAccessLayer
             services.AddScoped<IUoW, UoW>();
             services.AddTransient<IRecetteRepository, RecetteRepository>();
             services.AddTransient<IUtilisateurRepository, UtilisateurRepository>();
-            services.AddTransient<IIngredientsRepository, IngredientsRepository>();
+            services.AddTransient<IIngredientRepository, IngredientRepository>();
         }
     }
 }

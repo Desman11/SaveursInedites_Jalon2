@@ -12,14 +12,14 @@ namespace SaveursInedites_Jalon2.DataAccessLayer.Unit_of_Work
         private readonly IDBSession _dbSession;
         private readonly Lazy<IUtilisateurRepository> _utilisateurs;
         private readonly Lazy<IRecetteRepository> _recettes;
-        private readonly Lazy<IIngredientsRepository> _ingredients;
+        private readonly Lazy<IIngredientRepository> _ingredients;
 
         public UoW(IDBSession dbSession, IServiceProvider serviceProvider)
         {
             _dbSession = dbSession;
             _utilisateurs = new Lazy<IUtilisateurRepository>(() => serviceProvider.GetRequiredService<IUtilisateurRepository>());
             _recettes = new Lazy<IRecetteRepository>(() => serviceProvider.GetRequiredService<IRecetteRepository>());
-            _ingredients = new Lazy<IIngredientsRepository>(() => serviceProvider.GetRequiredService<IIngredientsRepository>());    
+            _ingredients = new Lazy<IIngredientRepository>(() => serviceProvider.GetRequiredService<IIngredientRepository>());    
         }
 
         #region Repositories
@@ -31,7 +31,7 @@ namespace SaveursInedites_Jalon2.DataAccessLayer.Unit_of_Work
 
         public IRecetteRepository Recette => _recettes.Value;
 
-        public IIngredientsRepository Ingredients => _ingredients.Value;
+        public IIngredientRepository Ingredients => _ingredients.Value;
 
         #endregion Repositories
 

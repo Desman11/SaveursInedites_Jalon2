@@ -5,7 +5,7 @@ namespace SaveursInedites_Jalon2.Domain.DTO.In
     /// <summary>
     /// DTO utilisé pour la création d'un ingredient.
     /// </summary>
-    public class CreateIngredientsDTO
+    public class CreateIngredientDTO
     {
         /// <summary>
         /// Nom de l'ingredient.
@@ -19,9 +19,9 @@ namespace SaveursInedites_Jalon2.Domain.DTO.In
     }
 
     /// <summary>
-    /// Validateur FluentValidation pour <see cref="CreateIngredientsDTO"/>.
+    /// Validateur FluentValidation pour <see cref="CreateIngredientDTO"/>.
     /// </summary>
-    public class CreateIngredientsDTOValidator : AbstractValidator<CreateIngredientsDTO>
+    public class CreateIngredientsDTOValidator : AbstractValidator<CreateIngredientDTO>
     {
         /// <summary>
         /// Initialise les règles de validation pour la création d'un ingredient.

@@ -10,7 +10,7 @@ namespace SaveursInedites_Jalon2.DataAccessLayer.Repositories
         {
             services.AddTransient<IRecetteRepository, RecetteRepository>();
             services.AddTransient<UtilisateurRepository, UtilisateurRepository>();
-            services.AddTransient<IIngredientsRepository, IngredientsRepository>();
+            services.AddTransient<IIngredientRepository, IngredientRepository>();
         }
     }
 }

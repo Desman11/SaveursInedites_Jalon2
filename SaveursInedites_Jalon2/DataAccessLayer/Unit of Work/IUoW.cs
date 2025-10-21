@@ -10,7 +10,7 @@ namespace SaveursInedites_Jalon2.DataAccessLayer.Unit_of_Work
 
         IUtilisateurRepository Utilisateur { get; }
         IRecetteRepository Recette { get; }
-        IIngredientsRepository Ingredients { get; }
+        IIngredientRepository Ingredient { get; }
 
         #endregion
 

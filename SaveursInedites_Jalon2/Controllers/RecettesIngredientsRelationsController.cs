@@ -15,13 +15,13 @@ namespace SaveursInedites_Jalon2.Controllers
     [ApiController]
     public class RecettesIngredientsRelationsController : ControllerBase
     {
-        private readonly IRecetteService _recetteService;
+        private readonly ISaveursService _recetteService;
 
         /// <summary>
         /// Initialise une nouvelle instance de la classe <see cref="RecettesIngredientsRelationsController"/>.
         /// </summary>
         /// <param name="recetteService">Service de gestion des recettes.</param>
-        public RecettesIngredientsRelationsController(IRecetteService recetteService)
+        public RecettesIngredientsRelationsController(ISaveursService recetteService)
         {
             _recetteService = recetteService;
         }
