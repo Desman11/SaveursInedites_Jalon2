@@ -27,9 +27,9 @@ namespace SaveursInedites_Jalon2.DataAccessLayer.Unit_of_Work
         // ATTENTION : Les repositories doivent utiliser la transaction en cours dans
         // les requêtes Dapper
 
-        public IUtilisateurRepository Utilisateur => _utilisateurs.Value;
+        public IUtilisateurRepository Utilisateurs => _utilisateurs.Value;
 
-        public IRecetteRepository Recette => _recettes.Value;
+        public IRecetteRepository Recettes => _recettes.Value;
 
         public IIngredientRepository Ingredients => _ingredients.Value;
 

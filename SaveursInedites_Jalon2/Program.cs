@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using SaveursInedites_Jalon2.Domain;
+using SaveursInedites_Jalon2.Services;
 using System.Reflection;
 using System.Security.Claims;
 using System.Text;
@@ -14,7 +16,7 @@ using SaveursInedites_Jalon2.Domain;
 using SaveursInedites_Jalon2.Services;
 using static SaveursInedites_Jalon2.Domain.IJwtSettings;
 
-namespace SaveursInedites_Jalon2
+namespace WebApplication1
 {
     /// <summary>
     /// Point d'entrée principal de l'application Web API.

@@ -39,7 +39,9 @@ namespace SaveursInedites_Jalon2.Services
         Task<bool> AddRecetteIngredientRelationshipAsync(int idIngredient, int idRecette);
         Task<bool> RemoveRecetteIngredientRelationshipAsync(int idIngredient, int idRecette);
         Task<IEnumerable<Recette>> GetRecettesByIdIngredientAsync(int idIngredient);
+       Task GetIngredientsByIdRecetteAsync(int idIngredient);
         Task<bool> DeleteRecetteRelationsAsync(int idRecette);
+        Task<bool> DeleteIngredientRelationsAsync(int idIngredient);
 
         #endregion Relations Recettes - Ingredients
 

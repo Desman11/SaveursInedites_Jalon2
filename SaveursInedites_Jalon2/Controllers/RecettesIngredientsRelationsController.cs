@@ -69,14 +69,14 @@ namespace SaveursInedites_Jalon2.Controllers
         }
 
         /// <summary>
-        /// Récupère la liste des ingrédients associés à une recette.
+        /// Récupère la liste des ingredients associés à une recette.
         /// </summary>
-        /// <param name="idRecette">Identifiant de la recette.</param>
-        /// <returns>Liste des ingrédients liés à la recette.</returns>
+        /// <param name="idRecette">Identifiant d'une recette.</param>
+        /// <returns>Liste des ingredients liés au recette.</returns>
         [HttpGet(nameof(GetIngredientsByIdRecette) + "/{idRecette}")]
         public async Task<IActionResult> GetIngredientsByIdRecette([FromRoute] int idRecette)
         {
-            var response = await _recetteService.GetIngredientsByIdRecetteAsync(idRecette);
+            var response = await _saveursService.GetIngredientsByIdRecetteAsync(idRecette);
             return Ok(response);
         }
 

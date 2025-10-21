@@ -77,7 +77,7 @@ namespace SaveursInedites_Jalon2.Services
         /// <returns>Une liste d'ingrédients.</returns>
         public async Task<IEnumerable<Ingredient>> GetAllIngredientsAsync()
         {
-            return await _UoW.Ingredients.GetAllAsync();
+            return await _UoW.Ingredient.GetAllAsync();
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace SaveursInedites_Jalon2.Services
         /// <returns>L'ingrédient correspondant à l'identifiant.</returns>
         public async Task<Ingredient> GetIngredientByIdAsync(int id)
         {
-            return await _UoW.Ingredients.GetAsync(id);
+            return await _UoW.Ingredient.GetAsync(id);
         }
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace SaveursInedites_Jalon2.Services
         /// <returns>L'ingrédient ajouté.</returns>
         public async Task<Ingredient> AddIngredientAsync(Ingredient newIngredient)
         {
-            return await _UoW.Ingredients.CreateAsync(newIngredient);
+            return await _UoW.Ingredient.CreateAsync(newIngredient);
         }
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace SaveursInedites_Jalon2.Services
         /// <returns>L'ingrédient modifié.</returns>
         public async Task<Ingredient> ModifyIngredientAsync(Ingredient updateIngredient)
         {
-            return await _UoW.Ingredients.ModifyAsync(updateIngredient);
+            return await _UoW.Ingredient.ModifyAsync(updateIngredient);
         }
 
         /// <summary>
@@ -117,7 +117,7 @@ namespace SaveursInedites_Jalon2.Services
         /// <returns>Vrai si la suppression a réussi, sinon faux.</returns>
         public async Task<bool> DeleteIngredientAsync(int id)
         {
-            return await _UoW.Ingredients.DeleteAsync(id);
+            return await _UoW.Ingredient.DeleteAsync(id);
         }
 
         #endregion Gestion des ingrédients
@@ -161,7 +161,7 @@ namespace SaveursInedites_Jalon2.Services
         /// </summary>
         /// <param name="idIngredient">Identifiant de l'ingredient.</param>
         /// <returns>Liste des recettes liées à l'ingredient.</returns>
-        public async Task<IEnumerable<Recette>> GetRecettesByIdIngredientAsync(int idIngredient)
+        public async Task<IEnumerable<Recette>> GetRecetteByIdIngredientAsync(int idIngredient)
         {
             return await _UoW.Recette.GetRecettesByIdIngredientAsync(idIngredient);
         }
