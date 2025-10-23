@@ -1,5 +1,5 @@
-﻿using SaveursInedites_Jalon2.DataAccessLayer.Repositories.Utilisateurs;
-using SaveursInedites_Jalon2.DataAccessLayer.Repositories.Recettes;
+﻿using SaveursInedites_Jalon2.DataAccessLayer.Repositories.Recettes;
+using SaveursInedites_Jalon2.DataAccessLayer.Repositories.Utilisateurs;
 using SaveursInedites_Jalon2.DataAccessLayer.Repositories.Ingredients;
 
 namespace SaveursInedites_Jalon2.DataAccessLayer.Unit_of_Work
@@ -8,9 +8,9 @@ namespace SaveursInedites_Jalon2.DataAccessLayer.Unit_of_Work
     {
         #region Repositories
 
-        IUtilisateurRepository Utilisateur { get; }
-        IRecetteRepository Recette { get; }
-        IIngredientRepository Ingredient { get; }
+        IRecetteRepository Recettes { get; }
+        IUtilisateurRepository Utilisateurs { get; }
+        IIngredientRepository Ingredients { get; }
 
         #endregion
 

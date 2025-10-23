@@ -1,36 +1,39 @@
 ﻿using FluentValidation;
 
-
 namespace SaveursInedites_Jalon2.Domain.DTO.In
 {
+    /// <summary>
+    /// DTO utilisé pour la mise à jour d'un utilisateur.
+    /// </summary>
     public class UpdateUtilisateurDTO
     {
+       
+        public int Id { get; set; }
 
        
-        public string Identifiant { get; set; } = string.Empty;
+        public string Identifiant { get; set; } 
 
-  
-        public string Email { get; set; } = string.Empty;
+       
+        public string Email { get; set; } 
 
-      
-        public string Password { get; set; } = string.Empty;
+       
+        public string Password { get; set; } 
 
-        public string Role { get; set; } = "User";
+        public int Role { get; set; }
     }
+
+    /// <summary>
+    /// Validateur FluentValidation pour <see cref="UpdateUtilisateurDTO"/>.
+    /// </summary>
     public class UpdateUtilisateurDTOValidator : AbstractValidator<UpdateUtilisateurDTO>
     {
+        /// <summary>
+        /// Initialise les règles de validation pour la mise à jour d'un utilisateur.
+        /// </summary>
         public UpdateUtilisateurDTOValidator()
         {
-            // Arrêter la validation dès qu'une règle échoue
-            //RuleLevelCascadeMode = CascadeMode.Stop;
-            //ClassLevelCascadeMode = CascadeMode.Stop;
-
-            RuleFor(r => r.Identifiant).NotNull().NotEmpty().WithMessage("L'identifiant est obligatoire.");
-            RuleFor(r => r.Email).NotNull().NotEmpty().WithMessage("L'email est obligatoire.");
-            RuleFor(r => r.Password).NotNull().NotEmpty().WithMessage("Le mot de passe est obligatoire.");
+            RuleFor(b => b.Email).NotNull().NotEmpty().WithMessage("L'Email est obligatoire.");
+            RuleFor(b => b.Password).NotNull().NotEmpty().WithMessage("Le mot de passe est obligatoire.");
         }
     }
 }
-
-
-

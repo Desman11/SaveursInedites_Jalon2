@@ -16,27 +16,27 @@ namespace SaveursInedites_Jalon2.Services
 
         public async Task<IEnumerable<Recette>> GetAllRecettesAsync()
         {
-            return await _UoW.Recette.GetAllAsync();
+            return await _UoW.Recettes.GetAllAsync();
         }
 
         public async Task<Recette> GetRecetteByIdAsync(int id)
         {
-            return await _UoW.Recette.GetAsync(id);
+            return await _UoW.Recettes.GetAsync(id);
         }
 
         public async Task<Recette> AddRecetteAsync(Recette newRecette)
         {
-            return await _UoW.Recette.CreateAsync(newRecette);
+            return await _UoW.Recettes.CreateAsync(newRecette);
         }
 
         public async Task<Recette> ModifyRecetteAsync(Recette updateRecette)
         {
-            return await _UoW.Recette.ModifyAsync(updateRecette);
+            return await _UoW.Recettes.ModifyAsync(updateRecette);
         }
 
         public async Task<bool> DeleteRecetteAsync(int id)
         {
-            return await _UoW.Recette.DeleteAsync(id);
+            return await _UoW.Recettes.DeleteAsync(id);
         }
 
         #endregion Gestion des recettes
@@ -45,27 +45,27 @@ namespace SaveursInedites_Jalon2.Services
 
         public async Task<IEnumerable<Utilisateur>> GetAllUtilisateursAsync()
         {
-            return await _UoW.Utilisateur.GetAllAsync();
+            return await _UoW.Utilisateurs.GetAllAsync();
         }
 
         public async Task<Utilisateur> GetUtilisateurByIdAsync(int id)
         {
-            return await _UoW.Utilisateur.GetAsync(id);
+            return await _UoW.Utilisateurs.GetAsync(id);
         }
 
         public async Task<Utilisateur> AddUtilisateurAsync(Utilisateur newUtilisateur)
         {
-            return await _UoW.Utilisateur.CreateAsync(newUtilisateur);
+            return await _UoW.Utilisateurs.CreateAsync(newUtilisateur);
         }
 
         public async Task<Utilisateur> ModifyUtilisateurAsync(Utilisateur updateUtilisateur)
         {
-            return await _UoW.Utilisateur.ModifyAsync(updateUtilisateur);
+            return await _UoW.Utilisateurs.ModifyAsync(updateUtilisateur);
         }
 
         public async Task<bool> DeleteUtilisateurAsync(int id)
         {
-            return await _UoW.Utilisateur.DeleteAsync(id);
+            return await _UoW.Utilisateurs.DeleteAsync(id);
         }
 
         #endregion Gestion des auteurs
@@ -77,7 +77,7 @@ namespace SaveursInedites_Jalon2.Services
         /// <returns>Une liste d'ingrédients.</returns>
         public async Task<IEnumerable<Ingredient>> GetAllIngredientsAsync()
         {
-            return await _UoW.Ingredient.GetAllAsync();
+            return await _UoW.Ingredients.GetAllAsync();
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace SaveursInedites_Jalon2.Services
         /// <returns>L'ingrédient correspondant à l'identifiant.</returns>
         public async Task<Ingredient> GetIngredientByIdAsync(int id)
         {
-            return await _UoW.Ingredient.GetAsync(id);
+            return await _UoW.Ingredients.GetAsync(id);
         }
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace SaveursInedites_Jalon2.Services
         /// <returns>L'ingrédient ajouté.</returns>
         public async Task<Ingredient> AddIngredientAsync(Ingredient newIngredient)
         {
-            return await _UoW.Ingredient.CreateAsync(newIngredient);
+            return await _UoW.Ingredients.CreateAsync(newIngredient);
         }
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace SaveursInedites_Jalon2.Services
         /// <returns>L'ingrédient modifié.</returns>
         public async Task<Ingredient> ModifyIngredientAsync(Ingredient updateIngredient)
         {
-            return await _UoW.Ingredient.ModifyAsync(updateIngredient);
+            return await _UoW.Ingredients.ModifyAsync(updateIngredient);
         }
 
         /// <summary>
@@ -117,7 +117,7 @@ namespace SaveursInedites_Jalon2.Services
         /// <returns>Vrai si la suppression a réussi, sinon faux.</returns>
         public async Task<bool> DeleteIngredientAsync(int id)
         {
-            return await _UoW.Ingredient.DeleteAsync(id);
+            return await _UoW.Ingredients.DeleteAsync(id);
         }
 
         #endregion Gestion des ingrédients
@@ -132,7 +132,7 @@ namespace SaveursInedites_Jalon2.Services
         /// <returns>Vrai si la relation a été ajoutée, sinon faux.</returns>
         public async Task<bool> AddRecetteIngredientRelationshipAsync(int idIngredient, int idRecette)
         {
-            return await _UoW.Recette.AddRecetteIngredientRelationshipAsync(idIngredient, idRecette);
+            return await _UoW.Recettes.AddRecetteIngredientRelationshipAsync(idIngredient, idRecette);
         }
 
         /// <summary>
@@ -143,7 +143,7 @@ namespace SaveursInedites_Jalon2.Services
         /// <returns>Vrai si la relation a été supprimée, sinon faux.</returns>
         public async Task<bool> RemoveRecetteIngredientRelationshipAsync(int idIngredient, int idRecette)
         {
-            return await _UoW.Recette.RemoveRecetteIngredientRelationshipAsync(idIngredient, idRecette);
+            return await _UoW.Recettes.RemoveRecetteIngredientRelationshipAsync(idIngredient, idRecette);
         }
 
         /// <summary>
@@ -153,19 +153,10 @@ namespace SaveursInedites_Jalon2.Services
         /// <returns>Liste des recettes liées à l'ingrédient.</returns>
         public async Task<IEnumerable<Recette>> GetRecettesByIdIngredientAsync(int idIngredient)
         {
-            return await _UoW.Recette.GetRecettesByIdIngredientAsync(idIngredient);
+            return await _UoW.Recettes.GetRecettesByIdIngredientAsync(idIngredient);
         }
 
-        /// <summary>
-        /// Récupère la liste des recettes associés à un        .
-        /// </summary>
-        /// <param name="idIngredient">Identifiant de l'ingredient.</param>
-        /// <returns>Liste des recettes liées à l'ingredient.</returns>
-        public async Task<IEnumerable<Recette>> GetRecetteByIdIngredientAsync(int idIngredient)
-        {
-            return await _UoW.Recette.GetRecettesByIdIngredientAsync(idIngredient);
-        }
-
+      
         /// <summary>
         /// Récupère la liste des ingredients  associés à une recette.
         /// </summary>
@@ -173,7 +164,7 @@ namespace SaveursInedites_Jalon2.Services
         /// <returns>Liste des ingredients liés à la recette.</returns>
         public async Task<IEnumerable<Ingredient>> GetIngredientsByIdRecetteAsync(int idRecette)
         {
-            return await _UoW.Ingredient.GetIngredientByIdRecetteAsync(idRecette);
+            return await _UoW.Ingredients.GetIngredientsByIdRecetteAsync(idRecette);
         }
 
         /// <summary>
@@ -183,7 +174,7 @@ namespace SaveursInedites_Jalon2.Services
         /// <returns>Vrai si les relations ont été supprimées, sinon faux.</returns>
         public async Task<bool> DeleteRecetteRelationsAsync(int idRecette   )
         {
-            return await _UoW.Recette.DeleteRecetteRelationsAsync(idRecette);
+            return await _UoW.Recettes.DeleteRecetteRelationsAsync(idRecette);
         }
 
         /// <summary>
@@ -193,10 +184,15 @@ namespace SaveursInedites_Jalon2.Services
         /// <returns>Vrai si les relations ont été supprimées, sinon faux.</returns>
         public async Task<bool> DeleteIngredientRelationsAsync(int idIngredient)
         {
-            return await _UoW.Ingredient.DeleteIngredientRelationsAsync(idIngredient);
+            return await _UoW.Ingredients.DeleteIngredientRelationsAsync(idIngredient);
+        }
+
+        Task ISaveursService.GetIngredientsByIdRecetteAsync(int idIngredient)
+        {
+            return GetIngredientsByIdRecetteAsync(idIngredient);
         }
 
         #endregion Gestion des relations entre recettes et ingredients
-}
+    }
     }
 

@@ -34,9 +34,9 @@ namespace SaveursInedites_Jalon2.DataAccessLayer.Repositories.Utilisateurs
             string query = string.Empty;
 
             if (_dbSession.DatabaseProviderName == DatabaseProviderName.MariaDB || _dbSession.DatabaseProviderName == DatabaseProviderName.MySQL)
-                query = $"INSERT INTO {UTILISATEUR_TABLE}(nom, email, mot_de_passe) VALUES(@Nom, @Email, @MotDePasse); Select LAST_INSERT_ID()";
+                query = $"INSERT INTO {UTILISATEUR_TABLE}(nom, email, password) VALUES(@Nom, @Email, @Password); Select LAST_INSERT_ID()";
             else if (_dbSession.DatabaseProviderName == DatabaseProviderName.PostgreSQL)
-                query = $"INSERT INTO {UTILISATEUR_TABLE}(nom, email, mot_de_passe) VALUES(@Nom, @Email, @MotDePasse) RETURNING id";
+                query = $"INSERT INTO {UTILISATEUR_TABLE}(nom, email, password) VALUES(@Nom, @Email, @Password) RETURNING id";
 
             int lastId = await _dbSession.Connection.ExecuteScalarAsync<int>(query, utilisateur);
             utilisateur.Id = lastId;
@@ -45,7 +45,7 @@ namespace SaveursInedites_Jalon2.DataAccessLayer.Repositories.Utilisateurs
 
         public async Task<Utilisateur> ModifyAsync(Utilisateur utilisateur)
         {
-            string query = $"UPDATE {UTILISATEUR_TABLE} SET nom = @Nom, email = @Email, mot_de_passe = @MotDePasse WHERE id = @Id";
+            string query = $"UPDATE {UTILISATEUR_TABLE} SET nom = @Nom, email = @Email, password = @Password WHERE id = @Id";
             int numLine = await _dbSession.Connection.ExecuteAsync(query, utilisateur);
             return numLine == 0 ? null : utilisateur;
         }
@@ -62,7 +62,12 @@ namespace SaveursInedites_Jalon2.DataAccessLayer.Repositories.Utilisateurs
             string query = $"SELECT u.* FROM {UTILISATEUR_TABLE} u JOIN recettes r ON u.id = r.createur WHERE r.id = @idRecette";
             return await _dbSession.Connection.QueryAsync<Utilisateur>(query, new { idRecette }, _dbSession.Transaction);
         }
-      
+
+        public Task<bool> DeleteUtilisateurRelationsAsync(int idUtilisateur)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion Methods specific to UtilisateurRepository
     }
 }

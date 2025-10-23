@@ -6,8 +6,9 @@ namespace SaveursInedites_Jalon2.DataAccessLayer.Repositories.Utilisateurs
     {
         // Ajouter ici des méthodes spécifiques au repository Utilisateurs si nécessaire
         Task<IEnumerable<Utilisateur>> GetUtilisateursByIdRecetteAsync(int idRecette);
+        Task<bool> DeleteUtilisateurRelationsAsync(int idUtilisateur);
 
-        
+
     }
 }
 

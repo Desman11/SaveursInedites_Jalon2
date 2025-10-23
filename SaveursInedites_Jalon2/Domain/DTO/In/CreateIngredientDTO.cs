@@ -7,30 +7,21 @@ namespace SaveursInedites_Jalon2.Domain.DTO.In
     /// </summary>
     public class CreateIngredientDTO
     {
-        /// <summary>
-        /// Nom de l'ingredient.
-        /// </summary>
+        
         public string Nom { get; set; }
-
-        /// <summary>
-        /// Description de l'ingredient.
-        /// </summary>
-   
     }
 
     /// <summary>
     /// Validateur FluentValidation pour <see cref="CreateIngredientDTO"/>.
     /// </summary>
-    public class CreateIngredientsDTOValidator : AbstractValidator<CreateIngredientDTO>
+    public class CreateIngredientDTOValidator : AbstractValidator<CreateIngredientDTO>
     {
         /// <summary>
-        /// Initialise les règles de validation pour la création d'un ingredient.
+        /// Initialise les règles de validation pour la création d'un auteur.
         /// </summary>
-        public CreateIngredientsDTOValidator()
+        public CreateIngredientDTOValidator()
         {
-            RuleFor(i => i.Nom).NotNull().NotEmpty().WithMessage("Le nom de l'ingredient est obligatoire.");
-            
+            RuleFor(a => a.Nom).NotNull().NotEmpty().WithMessage("Le nom est obligatoire.");
         }
     }
 }
-

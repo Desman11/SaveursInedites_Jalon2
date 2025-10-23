@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SaveursInedites_Jalon2.Domain.BO;
 using SaveursInedites_Jalon2.Domain.DTO.In;
@@ -13,9 +14,9 @@ namespace SaveursInedites_Jalon2.Controllers
     {
         private readonly ISaveursService _saveursService;
 
-        public UtilisateursController(ISaveursService biblioService)
+        public UtilisateursController(ISaveursService saveurService)
         {
-            _saveursService = biblioService;
+            _saveursService = saveurService;
         }
 
         [HttpGet()]
@@ -29,8 +30,9 @@ namespace SaveursInedites_Jalon2.Controllers
                 Id = a.Id,
                 Identifiant = a.Identifiant,
                 Email = a.Email,
-              
-                Role_id = a.Role_id
+                Role = a.Role,
+                Password = a.Password
+
             });
 
             return Ok(response);
@@ -51,8 +53,8 @@ namespace SaveursInedites_Jalon2.Controllers
                 Id = utilisateur.Id,
                 Identifiant = utilisateur.Identifiant,
                 Email = utilisateur.Email,
-               
-                Role = utilisateur.Role
+                Role = utilisateur.Role,
+                Password = utilisateur.Password
             };
 
             return Ok(response);
@@ -70,7 +72,7 @@ namespace SaveursInedites_Jalon2.Controllers
                 Email = request.Email,
                 Identifiant = request.Identifiant,
                 Password = request.Password,
-                Role = request.Role
+                
             };
 
             var newUtilisateur = await _saveursService.AddUtilisateurAsync(utilisateur);
@@ -83,11 +85,16 @@ namespace SaveursInedites_Jalon2.Controllers
                 Id = newUtilisateur.Id,
                 Identifiant = newUtilisateur.Identifiant,
                 Email = newUtilisateur.Email,
-                
+                Password = newUtilisateur.Password,
                 Role = newUtilisateur.Role
             };
 
             return CreatedAtAction(nameof(GetUtilisateurById), new { id = response.Id }, response);
+        }
+
+        private object GetUtilisateurById()
+        {
+            throw new NotImplementedException();
         }
 
         [HttpPut("{id}")]
@@ -117,8 +124,7 @@ namespace SaveursInedites_Jalon2.Controllers
                 Id = modifiedUtilisateur.Id,
                 Identifiant = modifiedUtilisateur.Identifiant,
                 Email = modifiedUtilisateur.Email,
-               
-                Role = modifiedUtilisateur.Role
+                Role = modifiedUtilisateur.Role 
             };
 
             return Ok(response);
