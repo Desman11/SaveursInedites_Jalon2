@@ -102,7 +102,7 @@ namespace WebApplication1
             builder.Services.AddSwaggerGen(options =>
             {
                 // Affichage du titre et de la version dans Swagger UI
-                options.SwaggerDoc("v1", new OpenApiInfo { Title = "Bibliothèque", Version = "v1" });
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "Saveurs-Inédites", Version = "v1" });
 
                 // Inclure les commentaires XML (Le fichier XML doit être généré dans les propriétés du projet)
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
