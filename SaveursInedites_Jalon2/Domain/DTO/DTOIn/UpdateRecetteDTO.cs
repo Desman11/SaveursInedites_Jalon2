@@ -1,8 +1,9 @@
 ﻿using FluentValidation;
 
-namespace SaveursInedites_Jalon2.Domain.DTO.In
+
+namespace SaveursInedites_Jalon2.Domain.DTO.DTOIn
 {
-    public class CreateRecetteDTO
+    public class UpdateRecetteDTO
     {
         public int Id { get; set; }
 
@@ -18,9 +19,9 @@ namespace SaveursInedites_Jalon2.Domain.DTO.In
 
         public int Createur { get; set; }
     }
-    public class CreateRecetteDTOValidator : AbstractValidator<CreateRecetteDTO>
+    public class UpdateRecetteDTOValidator : AbstractValidator<UpdateRecetteDTO>
     {
-        public CreateRecetteDTOValidator()
+        public UpdateRecetteDTOValidator()
         {
             // Arrêter la validation dès qu'une règle échoue
             //RuleLevelCascadeMode = CascadeMode.Stop;
@@ -31,5 +32,6 @@ namespace SaveursInedites_Jalon2.Domain.DTO.In
         }
     }
 }
+
 
 

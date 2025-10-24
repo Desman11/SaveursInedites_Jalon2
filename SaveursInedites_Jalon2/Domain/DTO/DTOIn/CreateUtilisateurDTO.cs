@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace SaveursInedites_Jalon2.Domain.DTO.In
+namespace SaveursInedites_Jalon2.Domain.DTO.DTOIn
 {
     public class CreateUtilisateurDTO
     {

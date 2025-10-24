@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace SaveursInedites_Jalon2.Domain.DTO.In
+namespace SaveursInedites_Jalon2.Domain.DTO.DTOIn
 {
     /// <summary>
     /// DTO utilisé pour la mise à jour d'un ingredient.

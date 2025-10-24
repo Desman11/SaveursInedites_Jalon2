@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
-using SaveursInedites_Jalon2.Domain.DTO.In;
-using SaveursInedites_Jalon2.Domain.DTO.Out;
+using SaveursInedites_Jalon2.Domain.DTO.DTOIn;
+using SaveursInedites_Jalon2.Domain.DTO.DTOOut;
 using SaveursInedites_Jalon2.Services;
 
 namespace SaveursInedites_Jalon2.Controllers
