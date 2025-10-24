@@ -21,11 +21,11 @@ namespace SaveursInedites_Jalon2.Controllers
 
         [HttpGet()]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetAuthors()
+        public async Task<IActionResult> GetUtilisateurs()
         {
-            var authors = await _saveursService.GetAllUtilisateursAsync();
+            var utilisateurs = await _saveursService.GetAllUtilisateursAsync();
 
-            IEnumerable<UtilisateurDTO> response = authors.Select(a => new UtilisateurDTO()
+            IEnumerable<UtilisateurDTO> response = utilisateurs.Select(a => new UtilisateurDTO()
             {
                 Id = a.Id,
                 Identifiant = a.Identifiant,
@@ -41,7 +41,7 @@ namespace SaveursInedites_Jalon2.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetAuthorById([FromRoute] int id)
+        public async Task<IActionResult> GetUtilisateurById([FromRoute] int id)
         {
             var utilisateur = await _saveursService.GetUtilisateurByIdAsync(id);
 
@@ -63,7 +63,7 @@ namespace SaveursInedites_Jalon2.Controllers
         [HttpPost()]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateAuthor(IValidator<CreateUtilisateurDTO> validator, [FromBody] CreateUtilisateurDTO request)
+        public async Task<IActionResult> CreateUtilisateur(IValidator<CreateUtilisateurDTO> validator, [FromBody] CreateUtilisateurDTO request)
         {
             validator.ValidateAndThrow(request);
 
@@ -78,7 +78,7 @@ namespace SaveursInedites_Jalon2.Controllers
             var newUtilisateur = await _saveursService.AddUtilisateurAsync(utilisateur);
 
             if (newUtilisateur is null)
-                return BadRequest("Invalid author data.");
+                return BadRequest("Invalid utilisateur data.");
 
             UtilisateurDTO response = new()
             {

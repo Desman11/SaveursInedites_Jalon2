@@ -12,11 +12,9 @@ using System.Security.Claims;
 using System.Text;
 using SaveursInedites_Jalon2.DataAccessLayer;
 using SaveursInedites_Jalon2.DataAccessLayer.Repositories;
-using SaveursInedites_Jalon2.Domain;
-using SaveursInedites_Jalon2.Services;
 using static SaveursInedites_Jalon2.Domain.IJwtSettings;
 
-namespace WebApplication1
+namespace SaveursInedites_Jalon2
 {
     /// <summary>
     /// Point d'entrée principal de l'application Web API.

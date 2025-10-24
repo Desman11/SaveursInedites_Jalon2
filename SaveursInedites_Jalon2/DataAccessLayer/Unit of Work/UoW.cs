@@ -26,7 +26,7 @@ namespace SaveursInedites_Jalon2.DataAccessLayer.Unit_of_Work
         // ATTENTION : Les repositories doivent utiliser la transaction en cours dans
         // les requêtes Dapper
 
-        public IUtilisateurRepository Authors => _utilisateurs.Value;
+        public IUtilisateurRepository Utilisateurs => _utilisateurs.Value;
 
         public IRecetteRepository Recettess => _recettes.Value;
 
@@ -40,7 +40,9 @@ namespace SaveursInedites_Jalon2.DataAccessLayer.Unit_of_Work
 
         public IRecetteRepository Recettes => throw new NotImplementedException();
 
-        public IUtilisateurRepository Utilisateurs => throw new NotImplementedException();
+        public IUtilisateurRepository Utilisateur => throw new NotImplementedException();
+
+        public IIngredientRepository Ingredient => throw new NotImplementedException();
 
         public void BeginTransaction()
             => _dbSession.BeginTransaction();

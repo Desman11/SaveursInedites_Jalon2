@@ -49,7 +49,7 @@ namespace SaveursInedites_Jalon2.Controllers
         [HttpDelete(nameof(GetIngredientsByIdRecette) + "/{idRecette}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> RemoverecetteAuthorRelationship([FromRoute] int idIngredient, [FromRoute] int idRecette)
+        public async Task<IActionResult> RemoverecetteIngredientRelationship([FromRoute] int idIngredient, [FromRoute] int idRecette)
         {
             var success = await _saveursService.RemoveRecetteIngredientRelationshipAsync(idIngredient, idRecette);
             return success ? NoContent() : NotFound();
