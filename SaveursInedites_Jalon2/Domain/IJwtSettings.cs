@@ -1,6 +1,6 @@
 ﻿namespace SaveursInedites_Jalon2.Domain
 {
-    public class IJwtSettings
+    public interface IJwtSettings
     {
         public string Secret { get; }
         public string Issuer { get; }

@@ -9,8 +9,8 @@ using SaveursInedites_Jalon2.Services;
 namespace SaveursInedites_Jalon2.Controllers
 {
     /// <summary>
-    /// Contrôleur API pour la gestion des Ingredients.
-    /// Permet de récupérer, créer, modifier et supprimer des ingrédients.
+    /// Contrôleur API pour la gestion des ingredients.
+    /// Permet de récupérer, créer, modifier et supprimer des ingredients.
     /// Accessible aux administrateurs et aux utilisateurs.
     /// </summary>
     [Authorize(Roles = "Administrateur,Utilisateur")]
@@ -18,49 +18,48 @@ namespace SaveursInedites_Jalon2.Controllers
     [ApiController]
     public class IngredientsController : ControllerBase
     {
-        private readonly ISaveursService _ingredientService;
+        private readonly ISaveursService _saveursService;
 
         /// <summary>
         /// Initialise une nouvelle instance de la classe <see cref="IngredientsController"/>.
         /// </summary>
-        /// <param name="ingredientService">Service de gestion des ingrédients.</param>
-        public IngredientsController(ISaveursService ingredientService)
+        /// <param name="saveursService">Service de gestion des ingredients.</param>
+        public IngredientsController(ISaveursService saveursService)
         {
-            _ingredientService = ingredientService;
+            _saveursService = saveursService;
         }
 
         /// <summary>
-        /// Récupère la liste de tous les ingrédients.
+        /// Récupère la liste de tous les ingredients.
         /// </summary>
-        /// <returns>Une liste d'ingrédients.</returns>
+        /// <returns>Une liste d'ingredients.</returns>
         [HttpGet()]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetIngredients()
         {
-            var ingredients = await _ingredientService.GetAllIngredientsAsync();
+            var ingredients = await _saveursService.GetAllIngredientsAsync();
 
             IEnumerable<IngredientDTO> response = ingredients.Select(i => new IngredientDTO()
             {
                 Id = i.Id,
                 Nom = i.Nom,
-               
+            
             });
 
             return Ok(response);
-         
         }
 
         /// <summary>
-        /// Récupère d'un ingredient par son identifiant.
+        /// Récupère un ingredient par son identifiant.
         /// </summary>
-        /// <param name="id">Identifiant de l'ingrédient.</param>
-        /// <returns>L'ingrédient correspondant à l'identifiant, ou le code 404 si l'ingrédient n'existe pas.</returns>
+        /// <param name="id">Identifiant de l'ingredient.</param>
+        /// <returns>L'ingredient correspondant à l'identifiant, ou le code 404 si l'ingredient n'existe pas.</returns>
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetIngredientById([FromRoute] int id)
         {
-            var ingredient = await _ingredientService.GetIngredientByIdAsync(id);
+            var ingredient = await _saveursService.GetIngredientByIdAsync(id);
 
             if (ingredient is null)
                 return NotFound();
@@ -69,18 +68,19 @@ namespace SaveursInedites_Jalon2.Controllers
             {
                 Id = ingredient.Id,
                 Nom = ingredient.Nom,
-            
+              
+
             };
 
             return Ok(response);
         }
 
         /// <summary>
-        /// Crée un nouveau livre.
+        /// Crée un nouvel ingredient.
         /// </summary>
-        /// <param name="validator">Validateur pour le modèle de création de livre.</param>
-        /// <param name="request">Données du livre à créer.</param>
-        /// <returns>Le livre créé, ou le code 400 en cas d'erreur.
+        /// <param name="validator">Validateur pour le modèle de création d'un ingredient'.</param>
+        /// <param name="request">Données de l'ingredient à créer.</param>
+        /// <returns>L'ingredient créée, ou le code 400 en cas d'erreur.
         /// </returns>
         [HttpPost()]
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -91,11 +91,12 @@ namespace SaveursInedites_Jalon2.Controllers
 
             Ingredient ingredient = new()
             {
+                Id = request.Id,
                 Nom = request.Nom,
             
             };
 
-            var newIngredient = await _ingredientService.AddIngredientAsync(ingredient);
+            var newIngredient = await _saveursService.AddIngredientAsync(ingredient);
 
             if (newIngredient is null)
                 return BadRequest("Invalid ingredient data.");
@@ -113,10 +114,10 @@ namespace SaveursInedites_Jalon2.Controllers
         /// <summary>
         /// Met à jour un ingredient existant.
         /// </summary>
-        /// <param name="validator">Validateur pour le modèle de mise à jour d'ingredient.</param>
+        /// <param name="validator">Validateur pour le modèle de mise à jour d'un ingredient'.</param>
         /// <param name="id">Identifiant de l'ingredient à mettre à jour.</param>
-        /// <param name="request">Données mises à jour de l'ingredient.</param>
-        /// <returns>L'ingredient mis à jour, ou le code 400 en cas d'erreur.</returns>
+        /// <param name="request">Données mises à jour de l'ingredient'.</param>
+        /// <returns>L'ingredient mise à jour, ou le code 400 en cas d'erreur.</returns>
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -124,41 +125,40 @@ namespace SaveursInedites_Jalon2.Controllers
         {
             validator.ValidateAndThrow(request);
 
-            Ingredient ingredient = new()
+            Ingredient Ingredient = new()
             {
                 Id = id,
-                Nom = request.Nom,
-         
+               Nom = request.Nom 
             };
 
-            var modifiedIngredient = await _ingredientService.ModifyIngredientAsync(ingredient);
+            var modifiedIngredient = await _saveursService.ModifyIngredientAsync(Ingredient);
 
             if (modifiedIngredient is null)
-                return BadRequest("Invalid ingredient.");
+                return BadRequest("Invalid Ingredient.");
 
             IngredientDTO response = new()
             {
                 Id = modifiedIngredient.Id,
                 Nom = modifiedIngredient.Nom,
-              
+                
             };
 
             return Ok(response);
         }
 
         /// <summary>
-        /// Supprime un livre par son identifiant.
+        /// Supprime un ingredient par son identifiant.
         /// </summary>
-        /// <param name="id">Identifiant du livre à supprimer.</param>
+        /// <param name="id">Identifiant de l'ingredient à supprimer.</param>
         /// <returns>
-        /// Un code 204 si la suppression a réussi, ou 404 si l'auteur n'existe pas.
+        /// Un code 204 si la suppression a réussi, ou 404 si l'ingredient n'existe pas.
         /// </returns>
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteIngredient([FromRoute] int id)
         {
-            var success = await _ingredientService.DeleteIngredientAsync(id);
+            var success = await _saveursService.DeleteIngredientAsync(id);
             return success ? NoContent() : NotFound();
         }
     }

@@ -79,6 +79,7 @@ namespace SaveursInedites_Jalon2
             })
             .AddJwtBearer(options =>
             {
+                Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(jwtSettings));
                 // Paramètres de validation du token JWT.
                 options.TokenValidationParameters = new TokenValidationParameters
                 {

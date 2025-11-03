@@ -5,10 +5,12 @@ using SaveursInedites_Jalon2.Domain.BO;
 
 namespace SaveursInedites_Jalon2.DataAccessLayer.Repositories.Ingredients
 {
+
     public class IngredientRepository : IIngredientRepository
     {
-        const string INGREDIENT_TABLE = "Ingredient";
-        const string RECETTE_INGREDIENT_TABLE = "recette_Ingredient";
+        const string INGREDIENT_TABLE = "ingredient";
+        const string RECETTE_INGREDIENT_TABLE = "recette_ingredient";
+
         readonly IDBSession _dbSession;
 
         public IngredientRepository(IDBSession dbSession)
@@ -28,25 +30,40 @@ namespace SaveursInedites_Jalon2.DataAccessLayer.Repositories.Ingredients
             return await _dbSession.Connection.QuerySingleOrDefaultAsync<Ingredient>(query, new { id }, transaction: _dbSession.Transaction);
         }
 
-        public async Task<Ingredient> CreateAsync(Ingredient Ingredient)
+        public async Task<Ingredient> CreateAsync(Ingredient ingredient)
         {
             string query = string.Empty;
 
             if (_dbSession.DatabaseProviderName == DatabaseProviderName.MariaDB || _dbSession.DatabaseProviderName == DatabaseProviderName.MySQL)
-                query = $"INSERT INTO {INGREDIENT_TABLE}(nom) VALUES(@Nom); Select LAST_INSERT_ID()";
+            {
+                query = $@"
+                    INSERT INTO {INGREDIENT_TABLE}(nom) 
+                    VALUES(@Nom); 
+                    SELECT LAST_INSERT_ID();";
+            }
             else if (_dbSession.DatabaseProviderName == DatabaseProviderName.PostgreSQL)
-                query = $"INSERT INTO {INGREDIENT_TABLE}(nom) VALUES(@Nom) RETURNING id";
+            {
+                query = $@"
+                    INSERT INTO {INGREDIENT_TABLE}(nom) 
+                    VALUES(@Nom) 
+                    RETURNING id;";
+            }
 
-            int lastId = await _dbSession.Connection.ExecuteScalarAsync<int>(query, Ingredient, transaction: _dbSession.Transaction);
-            Ingredient.Id = lastId;
-            return Ingredient;
+            int lastId = _dbSession.Connection.ExecuteScalar<int>(query, ingredient, transaction: _dbSession.Transaction);
+            ingredient.Id = lastId;
+            return ingredient;
         }
 
-        public async Task<Ingredient> ModifyAsync(Ingredient Ingredient)
+        public async Task<Ingredient> ModifyAsync(Ingredient ingredient)
         {
-            string query = $"UPDATE {INGREDIENT_TABLE} SET nom = @Nom WHERE id = @Id";
-            int numLine = await _dbSession.Connection.ExecuteAsync(query, Ingredient, transaction: _dbSession.Transaction);
-            return numLine == 0 ? null : Ingredient;
+            string query = $@"
+                UPDATE {INGREDIENT_TABLE} 
+                SET nom = @Nom, 
+                
+                WHERE id = @Id";
+
+            int numLine = await _dbSession.Connection.ExecuteAsync(query, ingredient, transaction: _dbSession.Transaction);
+            return numLine == 0 ? null : ingredient;
         }
 
         public async Task<bool> DeleteAsync(int id)
@@ -55,79 +72,33 @@ namespace SaveursInedites_Jalon2.DataAccessLayer.Repositories.Ingredients
             int numLine = await _dbSession.Connection.ExecuteAsync(query, new { id }, transaction: _dbSession.Transaction);
             return numLine != 0;
         }
-
         #region Methods specific to IngredientRepository
 
-        public async Task<bool> AddIngredientrecetteRelationshipAsync(int idrecette, int idingredient)
+        public async Task<bool> AddIngredientRecetteRelationshipAsync(int idRecette, int idIngredient)
         {
-            string query = $"INSERT INTO {RECETTE_INGREDIENT_TABLE}(idrecette, idingredient) VALUES(@idRecette, @idIngredient)";
-            int numLine = await _dbSession.Connection.ExecuteAsync(query, new { idrecette, idingredient }, transaction: _dbSession.Transaction);
+            string query = $"INSERT INTO {RECETTE_INGREDIENT_TABLE}(idRecette, idIngredient) VALUES(@idRecette, @idIngredient)";
+            int numLine = await _dbSession.Connection.ExecuteAsync(query, new { idRecette, idIngredient }, transaction: _dbSession.Transaction);
             return numLine != 0;
         }
 
-        public async Task<bool> RemoveIngredientrecetteRelationshipAsync(int idrecette, int idingredient)
+        public async Task<bool> RemoveIngredientRecetteRelationshipAsync(int idRecette, int idIngredient)
         {
-            string query = $"DELETE FROM {RECETTE_INGREDIENT_TABLE} WHERE idrecette = @idRecette AND idingredient = @idIngredient";
-            int numLine = await _dbSession.Connection.ExecuteAsync(query, new { idrecette, idingredient }, transaction: _dbSession.Transaction);
+            string query = $"DELETE FROM {RECETTE_INGREDIENT_TABLE} WHERE idRecette = @idRecette AND idIngredient = @idIngredient";
+            int numLine = await _dbSession.Connection.ExecuteAsync(query, new { idRecette, idIngredient }, transaction: _dbSession.Transaction);
             return numLine != 0;
         }
 
-        public async Task<IEnumerable<Ingredient>> GetIngredientsByIdrecetteAsync(int idrecette)
+        public async Task<IEnumerable<Ingredient>> GetIngredientsByIdRecetteAsync(int idRecette)
         {
-            string query = $"SELECT b.* FROM {INGREDIENT_TABLE} b JOIN {RECETTE_INGREDIENT_TABLE} ab ON b.id = ab.idingredient WHERE ab.idrecette = @idrecette";
-            return await _dbSession.Connection.QueryAsync<Ingredient>(query, new { idrecette }, transaction: _dbSession.Transaction);
+            string query = $"SELECT b.* FROM {INGREDIENT_TABLE} b JOIN {RECETTE_INGREDIENT_TABLE} ab ON b.id = ab.idIngredient WHERE ab.idRecette = @idRecette";
+            return await _dbSession.Connection.QueryAsync<Ingredient>(query, new { idRecette }, transaction: _dbSession.Transaction);
         }
 
-        public async Task<bool> DeleteIngredientRelationsAsync(int idingredient)
+        public async Task<bool> DeleteIngredientRelationsAsync(int idIngredient)
         {
-            string query = $"DELETE FROM {RECETTE_INGREDIENT_TABLE} WHERE idingredient = @idIngredient";
-            int numLine = await _dbSession.Connection.ExecuteAsync(query, new { idingredient }, transaction: _dbSession.Transaction);
+            string query = $"DELETE FROM {RECETTE_INGREDIENT_TABLE} WHERE idIngredient = @idIngredient";
+            int numLine = await _dbSession.Connection.ExecuteAsync(query, new { idIngredient }, transaction: _dbSession.Transaction);
             return numLine != 0;
-        }
-
-        Task<bool> IIngredientRepository.AddIngredientRecetteRelationshipAsync(int idRecette, int idIngredient)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<bool> IIngredientRepository.RemoveIngredientRecetteRelationshipAsync(int idRecette, int idIngredient)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<IEnumerable<Ingredient>> IIngredientRepository.GetIngredientsByIdRecetteAsync(int idRecette)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<bool> IIngredientRepository.DeleteIngredientRelationsAsync(int idIngredient)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<IEnumerable<Ingredient>> IGenericReadRepository<int, Ingredient>.GetAllAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<Ingredient> IGenericReadRepository<int, Ingredient>.GetAsync(int key)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<Ingredient> IGenericWriteRepository<int, Ingredient>.CreateAsync(Ingredient entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<Ingredient> IGenericWriteRepository<int, Ingredient>.ModifyAsync(Ingredient entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<bool> IGenericWriteRepository<int, Ingredient>.DeleteAsync(int key)
-        {
-            throw new NotImplementedException();
         }
 
         #endregion Methods specific to IngredientRepository

@@ -42,7 +42,7 @@ namespace SaveursInedites_Jalon2.Controllers
             // Exemples à modifier avec une vraie validation 
             if (request.Username == "admin" && request.Password == "admin")
             {
-                var token = _jwtTokenService.GenerateToken(request.Username, "Administrateur", "Utilisateur");
+                var token = _jwtTokenService.GenerateToken(request.Username, "Administrateur");
                 return Ok(new JwtDTO { Token = token });
             }
             else if (request.Username == "user" && request.Password == "user")

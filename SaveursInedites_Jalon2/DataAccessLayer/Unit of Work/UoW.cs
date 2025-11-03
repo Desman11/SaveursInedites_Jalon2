@@ -28,7 +28,7 @@ namespace SaveursInedites_Jalon2.DataAccessLayer.Unit_of_Work
 
         public IUtilisateurRepository Utilisateurs => _utilisateurs.Value;
 
-        public IRecetteRepository Recettess => _recettes.Value;
+        public IRecetteRepository Recettes => _recettes.Value;
 
         public IIngredientRepository Ingredients => _ingredients.Value;
 
@@ -37,12 +37,6 @@ namespace SaveursInedites_Jalon2.DataAccessLayer.Unit_of_Work
         #region Transactions
 
         public bool HasActiveTransaction => _dbSession.HasActiveTransaction;
-
-        public IRecetteRepository Recettes => throw new NotImplementedException();
-
-        public IUtilisateurRepository Utilisateur => throw new NotImplementedException();
-
-        public IIngredientRepository Ingredient => throw new NotImplementedException();
 
         public void BeginTransaction()
             => _dbSession.BeginTransaction();

@@ -13,7 +13,8 @@ namespace SaveursInedites_Jalon2.Domain.DTO.DTOIn
         /// </summary>
         public string Nom { get; set; }
 
-   
+
+
     }
 
    
