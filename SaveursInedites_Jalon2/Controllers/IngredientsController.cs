@@ -125,22 +125,22 @@ namespace SaveursInedites_Jalon2.Controllers
         {
             validator.ValidateAndThrow(request);
 
-            Ingredient Ingredient = new()
+            Ingredient ingredient = new()
             {
-                Id = id,
-               Nom = request.Nom 
-            };
+                Id = request.Id,
+                Nom = request.Nom,
 
-            var modifiedIngredient = await _saveursService.ModifyIngredientAsync(Ingredient);
+               };
+
+            var modifiedIngredient = await _saveursService.ModifyIngredientAsync(ingredient);
 
             if (modifiedIngredient is null)
-                return BadRequest("Invalid Ingredient.");
+                return BadRequest("Invalid ingredient.");
 
             IngredientDTO response = new()
             {
                 Id = modifiedIngredient.Id,
                 Nom = modifiedIngredient.Nom,
-                
             };
 
             return Ok(response);

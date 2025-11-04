@@ -56,12 +56,7 @@ namespace SaveursInedites_Jalon2.DataAccessLayer.Repositories.Ingredients
 
         public async Task<Ingredient> ModifyAsync(Ingredient ingredient)
         {
-            string query = $@"
-                UPDATE {INGREDIENT_TABLE} 
-                SET nom = @Nom, 
-                
-                WHERE id = @Id";
-
+            string query = $"UPDATE {INGREDIENT_TABLE} SET nom = @nom WHERE id = @Id";
             int numLine = await _dbSession.Connection.ExecuteAsync(query, ingredient, transaction: _dbSession.Transaction);
             return numLine == 0 ? null : ingredient;
         }

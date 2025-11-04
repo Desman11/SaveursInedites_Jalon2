@@ -7,7 +7,7 @@ namespace SaveursInedites_Jalon2.Domain.DTO.DTOIn
     /// </summary>
     public class UpdateIngredientDTO
     {
-
+        public int Id { get; set; }
         /// <summary>
         /// Nom de l'ingredient.
         /// </summary>

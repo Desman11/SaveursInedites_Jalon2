@@ -3,9 +3,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
+using Npgsql;
+using SaveursInedites_Jalon2.Domain.BO;
 using SaveursInedites_Jalon2.Domain.DTO.DTOIn;
 using SaveursInedites_Jalon2.Domain.DTO.DTOOut;
 using SaveursInedites_Jalon2.Services;
+using System.Data;
 
 namespace SaveursInedites_Jalon2.Controllers
 {
