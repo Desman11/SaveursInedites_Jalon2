@@ -32,12 +32,42 @@ namespace API_UnitTests.APITests                     // Définit le namespace du
             OkObjectResult okObjectActualResult = actualResult as OkObjectResult; // Convertit le résultat obtenu en OkObjectResult pour accéder à sa valeur
             Assert.Empty(okObjectActualResult.Value as IEnumerable<RecetteDTO>); // Vérifie que la liste renvoyée dans la réponse est vide (aucune recette)
         }
+
+        [Fact]
+        public async void GetRecettes_Should_Be_OkObjectResult_With_2_RecettesDTO()
+        {
+            // ---------- ARRANGE ----------
+            var recette1 = new Recette() { Id = 1 };
+            var recette2 = new Recette() { Id = 2 };
+            var listRecettes = new List<Recette> { recette1, recette2 };
+
+            ISaveursService saveursService = Mock.Of<ISaveursService>();
+            Mock.Get(saveursService)
+                .Setup(s => s.GetAllRecettesAsync())
+                .ReturnsAsync(listRecettes);
+
+            RecettesController recettesController = new RecettesController(saveursService);
+            OkObjectResult expectedResult = new OkObjectResult(listRecettes.Select(a => new RecetteDTO
+            {
+                Id = a.Id,
+                Nom = a.Nom,
+                TempsPreparation = a.TempsPreparation,
+                TempsCuisson = a.TempsCuisson,
+                Difficulte = a.Difficulte,
+                Photo = a.Photo,
+                Createur = a.Createur
+            }));
+
+            // ---------- ACT ----------
+            var actualResult = await recettesController.GetRecettes();
+
+            // ---------- ASSERT ----------
+            Assert.IsType(expectedResult.GetType(), actualResult);
+            OkObjectResult okObjectActualResult = actualResult as OkObjectResult;
+            Assert.Equivalent(expectedResult.Value, okObjectActualResult.Value, true);
+        }
     }
 }
-
-
-
-
 
 
 

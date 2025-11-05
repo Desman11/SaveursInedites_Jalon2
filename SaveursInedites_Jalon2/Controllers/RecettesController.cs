@@ -42,7 +42,7 @@ namespace SaveursInedites_Jalon2.Controllers
             IEnumerable<RecetteDTO> response = recettes.Select(r => new RecetteDTO()
             {
                 Id = r.Id,
-            Nom = r.Nom,
+                Nom = r.Nom,
 
                 TempsPreparation = r.TempsPreparation,
 
@@ -106,7 +106,7 @@ namespace SaveursInedites_Jalon2.Controllers
         {
             validator.ValidateAndThrow(request);
 
-            Recette recette      = new()
+            Recette recette = new()
             {
                 Id = request.Id,
                 Nom = request.Nom,
