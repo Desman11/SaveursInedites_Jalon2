@@ -30,9 +30,9 @@ namespace SaveursInedites_Jalon2.Controllers
         }
 
         /// <summary>
-        /// Récupère la liste de tous les livres.
+        /// Récupère la liste de tous les recettes.
         /// </summary>
-        /// <returns>Une liste de livres.</returns>
+        /// <returns>Une liste de recettes.</returns>
         [HttpGet()]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetRecettes()
