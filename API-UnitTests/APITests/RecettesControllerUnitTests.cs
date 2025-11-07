@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;                      // Fournit les classes pour les contrôleurs et les résultats HTTP (OkObjectResult, etc.)
-using Moq;                                           // Importe la bibliothèque Moq utilisée pour créer des objets simulés (mocks)
-using SaveursInedites_Jalon2.Controllers;            // Importe le namespace contenant le contrôleur RecettesController à tester
-using SaveursInedites_Jalon2.Domain.BO;              // Importe les classes du domaine métier (ex : Recette)
-using SaveursInedites_Jalon2.Domain.DTO.DTOOut;      // Importe les classes DTO (objets de transfert de données) utilisées en sortie
-using SaveursInedites_Jalon2.Services;               // Importe l’interface ISaveursService utilisée par le contrôleur
+﻿
+
+using Microsoft.AspNetCore.Mvc;
+using Moq;
+using SaveursInedites_Jalon2.Controllers;
+using SaveursInedites_Jalon2.Domain.BO;
+using SaveursInedites_Jalon2.Domain.DTO.DTOOut;
+using SaveursInedites_Jalon2.Services;
 
 namespace API_UnitTests.APITests                     // Définit le namespace du projet de tests unitaires
 {
