@@ -20,7 +20,7 @@ namespace SaveursInedites_Jalon2
     /// Point d'entrée principal de l'application Web API.
     /// Configure les services, l'injection de dépendances, l'authentification, la documentation Swagger et le pipeline HTTP.
     /// </summary>
-    public partial class Program 
+    public class Program 
     {
         /// <summary>
         /// Méthode principale de démarrage de l'application.
