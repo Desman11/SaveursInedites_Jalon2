@@ -13,20 +13,21 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    services:
+      services:
       postgres:
         image: postgres:17.6
         env:
           POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: password        # même que dans appsettings.Integration.json
-          POSTGRES_DB: saveurs_inedites2     # même que dans appsettings.Integration.json
+          POSTGRES_PASSWORD: password          # idem appsettings
+          POSTGRES_DB: recetteDBTest          # <<< IMPORTANT : même nom que dans "PostgreSQL"
         ports:
           - 5435:5432
         options: >-
-          --health-cmd "pg_isready -U postgres -d saveurs_inedites2"
+          --health-cmd "pg_isready -U postgres -d recetteDBTest"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+
 
     steps:
       - uses: actions/checkout@v4
