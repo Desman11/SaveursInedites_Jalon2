@@ -1,4 +1,7 @@
-﻿using System.Net.Http.Json;
+﻿using System.Data;
+using System.Net.Http.Json;
+using Microsoft.Extensions.Configuration;
+using Npgsql;
 using SaveursInedites_Jalon2.Domain.DTO.DTOIn;
 using SaveursInedites_Jalon2.Domain.DTO.DTOOut;
 
@@ -8,22 +11,24 @@ namespace API_Test_Integration.Fixture;
 
 public abstract class IntegrationTest : IClassFixture<APIWebApplicationFactory>
 {
+
     public HttpClient httpClient { get; set; }
-
+    private readonly IConfiguration _configuration;
     public IntegrationTest(APIWebApplicationFactory webApi)
-    {
-        // Crée un client HTTP pour interagir avec l'API web
-        httpClient = webApi.CreateClient();
 
-        //stratégie pour fixer la base de données de test
-        //Dapper
-        //drop bd si existe
-        //relancer jeu de données
+    {
+        // instancier le client
+        httpClient = webApi.CreateClient();
+        _configuration = webApi.Configuration;
+
+        //Recréation de la base de données avant chaque test
+        //DownDatabase();
+        //UpDatabase();
     }
 
     public async Task Login(string username, string password)
     {
-        var httpResponse = await httpClient.PostAsJsonAsync<LoginDTO>("api/Authification/login", new()
+        var httpResponse = await httpClient.PostAsJsonAsync<LoginDTO>("api/Authentication/Login", new()
         {
             Username = username,
             Password = password
@@ -41,10 +46,36 @@ public abstract class IntegrationTest : IClassFixture<APIWebApplicationFactory>
     }
 
 
-    public void Logout(string username, string password)
+    public void Logout()
     {
         httpClient.DefaultRequestHeaders.Authorization = null;
     }
-}
 
+  
+    public void UpDatabase()
+    {
+        var StringConnection = _configuration.GetSection("DatabaseSettings").GetValue<string>("PostgreSQL");
+        IDbConnection con = new NpgsqlConnection(StringConnection);
+
+        con.Open();
+        string requeteSQL = File.ReadAllText("CreateDatabase.sql");
+        var commande = con.CreateCommand();
+        commande.CommandText = requeteSQL;
+        commande.ExecuteNonQuery();
+        con.Dispose();
+    }
+
+    public void DownDatabase()
+    {
+        var StringConnection = _configuration.GetSection("DatabaseSettings").GetValue<string>("PostgreSQL");
+        using (IDbConnection con = new NpgsqlConnection(StringConnection))
+        {
+            con.Open();
+            string requeteSQL = "DROP SCHEMA if exists public cascade;";
+            var commande = con.CreateCommand();
+            commande.CommandText = requeteSQL;
+            commande.ExecuteNonQuery();
+        }
+    }
+}
 

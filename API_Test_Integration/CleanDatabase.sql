@@ -1,0 +1,9 @@
+﻿---- Suppression des tables dans le bon ordre pour éviter les erreurs de contraintes
+--DROP TABLE IF EXISTS categories_recettes;
+--DROP TABLE IF EXISTS ingredients_recettes;
+--DROP TABLE IF EXISTS etapes;
+--DROP TABLE IF EXISTS avis;
+--DROP TABLE IF EXISTS recettes;
+--DROP TABLE IF EXISTS categories;
+--DROP TABLE IF EXISTS ingredients;
+--DROP TABLE IF EXISTS utilisateurs;

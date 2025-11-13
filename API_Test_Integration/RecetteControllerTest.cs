@@ -1,6 +1,10 @@
-﻿using API_Test_Integration.Fixture;
+﻿using System;
+using System.Collections.Generic;
 using System.Net.Http.Json;
+using System.Threading.Tasks;
+using API_Test_Integration.Fixture;
 using SaveursInedites_Jalon2.Domain.DTO.DTOOut;
+using Xunit;
 
 namespace API_Test_Integration
 {
@@ -11,84 +15,87 @@ namespace API_Test_Integration
         }
 
         [Fact]
-        public async void GetRecettes_Sould_Return_6_Recettes()
+        public async Task GetRecettes_Should_Return_6_Recettes()
         {
-
             // Arrange
-            List<RecetteDTO> recettesExpected = new List<RecetteDTO>()
-                {
+            DownDatabase();
+            UpDatabase();
+            await Login("admin", "admin");
 
+            var recettesExpected = new List<RecetteDTO>
+            {
                 new()
                 {
-                Id = 1,
-                Nom = "nom_1",
-                TempsPreparation = TimeSpan.FromMinutes(20),
-                TempsCuisson = TimeSpan.FromMinutes(15),
-                Difficulte = 2,
-                Photo = "photo_1",
-                Createur = 1
-                },
-                new()
-                 {
-                Id = 2,
-                Nom = "nom_2",
-                TempsPreparation = TimeSpan.FromMinutes(30),
-                TempsCuisson = TimeSpan.FromMinutes(25),
-                Difficulte = 3,
-                Photo = "photo_2",
-                Createur = 1
-                },
-                 new()
-                {
-                Id = 3,
-                Nom = "nom_3",
-                TempsPreparation = TimeSpan.FromMinutes(15),
-                TempsCuisson = TimeSpan.FromMinutes(00),
-                Difficulte = 2,
-                Photo = "photo_3",
-                Createur = 1
+                    Id = 1,
+                    Nom = "nom_1",
+                    TempsPreparation = TimeSpan.Zero,      // '00:00:00' en base
+                    TempsCuisson = TimeSpan.Zero,          // '00:00:00' en base
+                    Difficulte = 3,                        // comme ton INSERT d’origine
+                    Photo = "photo_1",
+                    Createur = 0                           // NULL -> 0 dans un int non nullable
                 },
                 new()
                 {
-                Id = 4,
-                Nom = "nom_4",
-                TempsPreparation = TimeSpan.FromMinutes(30),
-                TempsCuisson = TimeSpan.FromMinutes(30),
-                Difficulte = 5,
-                Photo = "photo_3",
-                Createur = 1
+                    Id = 2,
+                    Nom = "nom_2",
+                    TempsPreparation = TimeSpan.Zero,
+                    TempsCuisson = TimeSpan.Zero,
+                    Difficulte = 2,
+                    Photo = "photo_1",                     // ta base met "photo_1" partout
+                    Createur = 0
                 },
                 new()
                 {
-                Id = 5,
-                Nom = "nom_5",
-                TempsPreparation = TimeSpan.FromMinutes(20),
-                TempsCuisson = TimeSpan.FromMinutes(00),
-                Difficulte = 2,
-                Photo = "photo_3",
-                Createur = 1
+                    Id = 3,
+                    Nom = "nom_3",
+                    TempsPreparation = TimeSpan.Zero,
+                    TempsCuisson = TimeSpan.Zero,
+                    Difficulte = 2,
+                    Photo = "photo_1",
+                    Createur = 0
                 },
-                 new()
+                new()
                 {
-                Id = 6,
-                Nom = "nom_6",
-                TempsPreparation = TimeSpan.FromMinutes(30),
-                TempsCuisson = TimeSpan.FromMinutes(40),
-                Difficulte = 3,
-                Photo = "photo_3",
-                Createur = 1
+                    Id = 4,
+                    Nom = "nom_4",
+                    TempsPreparation = TimeSpan.Zero,
+                    TempsCuisson = TimeSpan.Zero,
+                    Difficulte = 5,
+                    Photo = "photo_1",
+                    Createur = 0
                 },
-
+                new()
+                {
+                    Id = 5,
+                    Nom = "nom_5",
+                    TempsPreparation = TimeSpan.Zero,
+                    TempsCuisson = TimeSpan.Zero,
+                    Difficulte = 2,
+                    Photo = "photo_1",
+                    Createur = 0
+                },
+                new()
+                {
+                    Id = 6,
+                    Nom = "nom_6",
+                    TempsPreparation = TimeSpan.Zero,
+                    TempsCuisson = TimeSpan.Zero,
+                    Difficulte = 3,
+                    Photo = "photo_1",
+                    Createur = 0
+                }
             };
 
-
             // Act
-            var list = await httpClient.GetFromJsonAsync<List<RecetteDTO>>("api/recettes");
-
+            var recettes = await httpClient.GetFromJsonAsync<List<RecetteDTO>>("/api/Recettes/");
 
             // Assert
-            Assert.NotNull(list);
-            Assert.Equivalent(recettesExpected, list);
+            Assert.NotNull(recettes);
+            Assert.Equal(6, recettes!.Count);
+            Assert.Equivalent(recettesExpected, recettes);
+
+            // Cleanup
+            Logout();
         }
     }
 }
