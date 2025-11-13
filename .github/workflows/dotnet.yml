@@ -11,18 +11,47 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
+  services:
+  postgres:
+    image: postgres:17.6
+    env:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password        # même valeur que Pwd=...
+      POSTGRES_DB: saveurs_inedites2     # même valeur que database=...
+    ports:
+      - 5435:5432
+    options: >-
+      --health-cmd "pg_isready -U postgres -d saveurs_inedites2"
+      --health-interval 10s
+      --health-timeout 5s
+      --health-retries 5
+
     steps:
-    - uses: actions/checkout@v4
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore
+
+      - name: Wait for PostgreSQL
+        run: |
+          for i in {1..15}; do
+            if pg_isready -h 127.0.0.1 -p 5435 -U postgres; then
+              echo "PostgreSQL is up!"
+              break
+            fi
+            echo "Waiting for PostgreSQL..."
+            sleep 2
+          done
+
+      - name: Test
+        run: dotnet test --no-build --verbosity normal
