@@ -5,104 +5,97 @@ using SaveursInedites_Jalon2.Services;
 namespace SaveursInedites_Jalon2.Controllers
 {
     /// <summary>
-    /// Contrôleur API pour la gestion des relations entre recettes et ingredients.
-    /// Permet d'ajouter, de supprimer et de consulter les relations entre les recettes et les ingredients.
-    /// Accessible aux administrateurs.
+    /// Gestion des relations Recette ↔ Ingrédient.
+    /// Toutes les opérations sont réservées au rôle Administrateur.
     /// </summary>
     [Authorize(Roles = "Administrateur")]
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api")]
     public class RecettesIngredientsRelationsController : ControllerBase
     {
         private readonly ISaveursService _saveursService;
 
-        /// <summary>
-        /// Initialise une nouvelle instance de la classe <see cref="RecettesIngredientsRelationsController"/>.
-        /// </summary>
-        /// <param name="saveursService">Service de gestion des recttes.</param>
         public RecettesIngredientsRelationsController(ISaveursService saveursService)
         {
             _saveursService = saveursService;
         }
 
-        /// <summary>
-        /// Ajoute une relation entre un ingredient et une recette.
-        /// </summary>
-        /// <param name="idIngredient">Identifiant de l'ingredient.</param>
-        /// <param name="idRecette">Identifiant de la recette.</param>
-        /// <returns>Code 204 si la relation est ajoutée, 404 si l'ingredient ou la recette n'existe pas.</returns>
-        [HttpPost(nameof(GetIngredientsByIdRecette) + "/{idRecette}")]
+        // --------------------------------------------------------------------
+        // Écriture (Admin) : ajouter / supprimer un lien recette↔ingrédient
+        // --------------------------------------------------------------------
+
+        /// <summary>Ajoute un lien entre une recette et un ingrédient.</summary>
+        /// <returns>204 si ajouté, 404 si recette ou ingrédient introuvable.</returns>
+        [HttpPost("recettes/{idRecette:int}/ingredients/{idIngredient:int}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> AddRecetteAuthorRelationship([FromRoute] int idIngredient, [FromRoute] int idRecette)
+        public async Task<IActionResult> AddRecetteIngredientRelationship(
+            [FromRoute] int idRecette,
+            [FromRoute] int idIngredient)
         {
-            var success = await _saveursService.AddRecetteIngredientRelationshipAsync(idIngredient, idRecette);
-            return success ? NoContent() : NotFound();
+            var ok = await _saveursService.AddRecetteIngredientRelationshipAsync(idIngredient, idRecette);
+            return ok ? NoContent() : NotFound();
         }
 
-        /// <summary>
-        /// Supprime une relation entre un ingredient et une recette.
-        /// </summary>
-        /// <param name="idIngredient">Identifiant de l'ingredient.</param>
-        /// <param name="idRecette">Identifiant de la recette.</param>
-        /// <returns>Code 204 si la relation est supprimée, 404 si la relation n'existe pas.</returns>
-        [HttpDelete(nameof(GetIngredientsByIdRecette) + "/{idRecette}")]
+        /// <summary>Supprime un lien entre une recette et un ingrédient.</summary>
+        /// <returns>204 si supprimé, 404 si le lien n’existe pas.</returns>
+        [HttpDelete("recettes/{idRecette:int}/ingredients/{idIngredient:int}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> RemoverecetteIngredientRelationship([FromRoute] int idIngredient, [FromRoute] int idRecette)
+        public async Task<IActionResult> RemoveRecetteIngredientRelationship(
+            [FromRoute] int idRecette,
+            [FromRoute] int idIngredient)
         {
-            var success = await _saveursService.RemoveRecetteIngredientRelationshipAsync(idIngredient, idRecette);
-            return success ? NoContent() : NotFound();
+            var ok = await _saveursService.RemoveRecetteIngredientRelationshipAsync(idIngredient, idRecette);
+            return ok ? NoContent() : NotFound();
         }
 
-        /// <summary>
-        /// Récupère la liste des recette associés à un ingredient.
-        /// </summary>
-        /// <param name="idIngredient">Identifiant de l'ingredient.</param>
-        /// <returns>Liste des recette liés à l'ingredient.</returns>
-        [HttpGet(nameof(GetRecettesByIdIngredient) + "/{idIngredient}")]
+        // --------------------------------------------------------------------
+        // Lecture : listes d’associations
+        // --------------------------------------------------------------------
+
+        /// <summary>Liste des recettes associées à un ingrédient.</summary>
+        [HttpGet("ingredients/{idIngredient:int}/recettes")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetRecettesByIdIngredient([FromRoute] int idIngredient)
         {
-            var response = await _saveursService.GetRecettesByIdIngredientAsync(idIngredient);
-            return Ok(response);
+            var recettes = await _saveursService.GetRecettesByIdIngredientAsync(idIngredient);
+            return Ok(recettes);
         }
 
-        /// <summary>
-        /// Récupère la liste des ingredients associés à une recette.
-        /// <param name="idRecette">Identifiant d'une recette.</param>
-        /// <returns>Liste des ingredients liés a une recette.</returns>
-        [HttpGet(nameof(GetIngredientsByIdRecette) + "/{idRecette}")]
+        /// <summary>Liste des ingrédients associés à une recette.</summary>
+        [HttpGet("recettes/{idRecette:int}/ingredients")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetIngredientsByIdRecette([FromRoute] int idRecette)
         {
-            await _saveursService.GetIngredientsByIdRecetteAsync(idRecette);
-            return Ok();
+            var ingredients = await _saveursService.GetIngredientsByIdRecetteAsync(idRecette);
+            return Ok(ingredients);
         }
-        /// <summary>
-        /// Supprime toutes les relations d'une recette avec des ingredients.
-        /// </summary>
-        /// <param name="idRecette">Identifiant d'une recette.</param>
-        /// <returns>Code 204 si les relations sont supprimées, 404 si la recette n'existe pas.</returns>
-        [HttpDelete(nameof(DeleteRecetteRelations) + "/{idRecette}")]
+
+        // --------------------------------------------------------------------
+        // Suppressions en masse
+        // --------------------------------------------------------------------
+
+        /// <summary>Supprime toutes les relations d’une recette.</summary>
+        /// <returns>204 si supprimées, 404 si la recette n’existe pas.</returns>
+        [HttpDelete("recettes/{idRecette:int}/ingredients")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteRecetteRelations([FromRoute] int idRecette)
         {
-            var success = await _saveursService.DeleteRecetteRelationsAsync(idRecette);
-            return success ? NoContent() : NotFound();
+            var ok = await _saveursService.DeleteRecetteRelationsAsync(idRecette);
+            return ok ? NoContent() : NotFound();
         }
 
-        /// <summary>
-        /// Supprime toutes les relations d'un ingredient avec des recette.
-        /// </summary>
-        /// <param name="idIngredient">Identifiant de l'ingredient.</param>
-        /// <returns>Code 204 si les relations sont supprimées, 404 si l'ingredient n'existe pas.</returns>
-        [HttpDelete(nameof(DeleteIngredientRelations) + "/{idIngredient}")]
+        /// <summary>Supprime toutes les relations d’un ingrédient.</summary>
+        /// <returns>204 si supprimées, 404 si l’ingrédient n’existe pas.</returns>
+        [HttpDelete("ingredients/{idIngredient:int}/recettes")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteIngredientRelations([FromRoute] int idIngredient)
         {
-            var success = await _saveursService.DeleteIngredientRelationsAsync(idIngredient);
-            return success ? NoContent() : NotFound();
+            var ok = await _saveursService.DeleteIngredientRelationsAsync(idIngredient);
+            return ok ? NoContent() : NotFound();
         }
     }
 }
