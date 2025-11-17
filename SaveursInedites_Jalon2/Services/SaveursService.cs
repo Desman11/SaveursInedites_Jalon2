@@ -48,6 +48,11 @@ namespace SaveursInedites_Jalon2.Services
         public async Task<bool> DeleteUtilisateurAsync(int id)
             => await _uow.Utilisateurs.DeleteAsync(id);
 
+        public async Task<Utilisateur?> GetUtilisateurByIdentifiantAsync(string identifiant)
+        {
+            return await _uow.Utilisateurs.GetByIdentifiantAsync(identifiant);
+        }
+
         #endregion
 
         #region Gestion des ingrédients

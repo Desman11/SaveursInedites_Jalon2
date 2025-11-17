@@ -56,6 +56,15 @@ namespace SaveursInedites_Jalon2.DataAccessLayer.Repositories.Utilisateurs
             int numLine = await _dbSession.Connection.ExecuteAsync(query, new { id });
             return numLine != 0;
         }
+
+        public async Task<Utilisateur?> GetByIdentifiantAsync(string identifiant)
+        {
+            string query = $"SELECT * FROM {UTILISATEUR_TABLE} WHERE identifiant = @identifiant";
+            return await _dbSession.Connection.QuerySingleOrDefaultAsync<Utilisateur>(query, new { identifiant });
+        }
+
+
+
         #region Methods specific to UtilisateurRepository
         public async Task<IEnumerable<Utilisateur>> GetUtilisateursByIdRecetteAsync(int idRecette)
         {

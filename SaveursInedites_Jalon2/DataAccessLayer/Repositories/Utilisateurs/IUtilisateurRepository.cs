@@ -8,6 +8,8 @@ namespace SaveursInedites_Jalon2.DataAccessLayer.Repositories.Utilisateurs
         Task<IEnumerable<Utilisateur>> GetUtilisateursByIdRecetteAsync(int idRecette);
         Task<bool> DeleteUtilisateurRelationsAsync(int idUtilisateur);
 
+        Task<Utilisateur?> GetByIdentifiantAsync(string identifiant);
+
 
     }
 }

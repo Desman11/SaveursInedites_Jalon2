@@ -9,211 +9,170 @@ using SaveursInedites_Jalon2.Services;
 namespace SaveursInedites_Jalon2.Controllers
 {
     /// <summary>
-    /// Contrôleur API pour la gestion des recettes.
-    /// Permet de récupérer, créer, modifier et supprimer des recettes.
-    /// Accessible aux administrateurs et aux utilisateurs.
+    /// API Recettes : lecture (authentifiés), création/modification/suppression (administrateurs).
     /// </summary>
-    [Authorize(Roles = "Administrateur,Utilisateur")]
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
+    [Produces("application/json", "application/problem+json")]
+    [Authorize] // par défaut: authentifié (User ou Admin)
     public class RecettesController : ControllerBase
     {
         private readonly ISaveursService _recetteService;
 
-        /// <summary>
-        /// Initialise une nouvelle instance de la classe <see cref="RecettesController"/>.
-        /// </summary>
-        /// <param name="recetteService">Service de gestion des recettes.</param>
         public RecettesController(ISaveursService recetteService)
         {
             _recetteService = recetteService;
         }
 
-        /// <summary>
-        /// Récupère la liste de tous les recettes.
-        /// </summary>
-        /// <returns>Une liste de recettes.</returns>
-        [HttpGet()]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        /// <summary>Liste toutes les recettes.</summary>
+        [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<RecetteDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetRecettes()
         {
             var recettes = await _recetteService.GetAllRecettesAsync();
 
-            IEnumerable<RecetteDTO> response = recettes.Select(r => new RecetteDTO()
+            var response = recettes.Select(r => new RecetteDTO
             {
                 Id = r.Id,
                 Nom = r.Nom,
-
                 TempsPreparation = r.TempsPreparation,
-
                 TempsCuisson = r.TempsCuisson,
-
                 Difficulte = r.Difficulte,
-
                 Photo = r.Photo,
-
                 Createur = r.Createur
             });
 
             return Ok(response);
         }
 
-        /// <summary>
-        /// Récupère une recette par son identifiant.
-        /// </summary>
-        /// <param name="id">Identifiant de la recette.</param>
-        /// <returns>La recette correspondant à l'identifiant, ou le code 404 si la recette n'existe pas.</returns>
-        [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        /// <summary>Récupère une recette par id.</summary>
+        [HttpGet("{id:int}")]
+        [ProducesResponseType(typeof(RecetteDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetRecetteById([FromRoute] int id)
         {
-            var recette = await _recetteService.GetRecetteByIdAsync(id);
+            var r = await _recetteService.GetRecetteByIdAsync(id);
+            if (r is null)
+                return Problem(statusCode: 404, title: "Introuvable", detail: $"Recette {id} inexistante.");
 
-            if (recette is null)
-                return NotFound();
-
-            RecetteDTO response = new()
+            var response = new RecetteDTO
             {
-                Id = recette.Id,
-                Nom = recette.Nom,
-
-                TempsPreparation = recette.TempsPreparation,
-
-                TempsCuisson = recette.TempsCuisson,
-
-                Difficulte = recette.Difficulte,
-
-                Photo = recette.Photo,
-
-                Createur = recette.Createur
+                Id = r.Id,
+                Nom = r.Nom,
+                TempsPreparation = r.TempsPreparation,
+                TempsCuisson = r.TempsCuisson,
+                Difficulte = r.Difficulte,
+                Photo = r.Photo,
+                Createur = r.Createur
             };
-
             return Ok(response);
         }
 
-        /// <summary>
-        /// Crée une nouvelle recette.
-        /// </summary>
-        /// <param name="validator">Validateur pour le modèle de création de recette.</param>
-        /// <param name="request">Données de la recette à créer.</param>
-        /// <returns>La recette créée, ou le code 400 en cas d'erreur.
-        /// </returns>
-        [HttpPost()]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateRecette(IValidator<CreateRecetteDTO> validator, [FromBody] CreateRecetteDTO request)
+        /// <summary>Crée une nouvelle recette. (Admin)</summary>
+        [HttpPost]
+        [Authorize(Roles = "Administrateur")]
+        [ProducesResponseType(typeof(RecetteDTO), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status403Forbidden)]
+        public async Task<IActionResult> CreateRecette(
+            [FromServices] IValidator<CreateRecetteDTO> validator,
+            [FromBody] CreateRecetteDTO request)
         {
             validator.ValidateAndThrow(request);
 
-            Recette recette = new()
+            // L'Id est géré par la base; on ignore request.Id s'il existe
+            var entity = new Recette
             {
-                Id = request.Id,
                 Nom = request.Nom,
-
                 TempsPreparation = request.TempsPreparation,
-
                 TempsCuisson = request.TempsCuisson,
-
                 Difficulte = request.Difficulte,
-
                 Photo = request.Photo,
-
                 Createur = request.Createur
             };
 
-            var newRecette = await _recetteService.AddRecetteAsync(recette);
+            var created = await _recetteService.AddRecetteAsync(entity);
+            if (created is null)
+                return Problem(statusCode: 400, title: "Requête invalide", detail: "Création impossible.");
 
-            if (newRecette is null)
-                return BadRequest("Invalid recette data.");
-
-            RecetteDTO response = new()
+            var response = new RecetteDTO
             {
-                Id = newRecette.Id,
-                Nom = newRecette.Nom,
-
-                TempsPreparation = newRecette.TempsPreparation,
-
-                TempsCuisson = newRecette.TempsCuisson,
-
-                Difficulte = newRecette.Difficulte,
-
-                Photo = newRecette.Photo,
-
-                Createur = newRecette.Createur
+                Id = created.Id,
+                Nom = created.Nom,
+                TempsPreparation = created.TempsPreparation,
+                TempsCuisson = created.TempsCuisson,
+                Difficulte = created.Difficulte,
+                Photo = created.Photo,
+                Createur = created.Createur
             };
 
             return CreatedAtAction(nameof(GetRecetteById), new { id = response.Id }, response);
         }
 
-        /// <summary>
-        /// Met à jour une recette existante.
-        /// </summary>
-        /// <param name="validator">Validateur pour le modèle de mise à jour de recette.</param>
-        /// <param name="id">Identifiant de la recette à mettre à jour.</param>
-        /// <param name="request">Données mises à jour de la recette.</param>
-        /// <returns>La recette mise à jour, ou le code 400 en cas d'erreur.</returns>
-        [HttpPut("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpdateRecette(IValidator<UpdateRecetteDTO> validator, [FromRoute] int id, [FromBody] UpdateRecetteDTO request)
+        /// <summary>Met à jour une recette. (Admin)</summary>
+        [HttpPut("{id:int}")]
+        [Authorize(Roles = "Administrateur")]
+        [ProducesResponseType(typeof(RecetteDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> UpdateRecette(
+            [FromServices] IValidator<UpdateRecetteDTO> validator,
+            [FromRoute] int id,
+            [FromBody] UpdateRecetteDTO request)
         {
             validator.ValidateAndThrow(request);
 
-            Recette recette = new()
+            var existing = await _recetteService.GetRecetteByIdAsync(id);
+            if (existing is null)
+                return Problem(statusCode: 404, title: "Introuvable", detail: $"Recette {id} inexistante.");
+
+            var toUpdate = new Recette
             {
-                Id = request.Id,
+                Id = id, // id route = source de vérité
                 Nom = request.Nom,
-
                 TempsPreparation = request.TempsPreparation,
-
                 TempsCuisson = request.TempsCuisson,
-
                 Difficulte = request.Difficulte,
-
                 Photo = request.Photo,
-
                 Createur = request.Createur
             };
 
-            var modifiedRecette = await _recetteService.ModifyRecetteAsync(recette);
+            var updated = await _recetteService.ModifyRecetteAsync(toUpdate);
+            if (updated is null)
+                return Problem(statusCode: 400, title: "Requête invalide", detail: "Mise à jour impossible.");
 
-            if (modifiedRecette is null)
-                return BadRequest("Invalid recette.");
-
-            RecetteDTO response = new()
+            var response = new RecetteDTO
             {
-                Id = modifiedRecette.Id,
-                Nom = modifiedRecette.Nom,
-
-                TempsPreparation = modifiedRecette.TempsPreparation,
-
-                TempsCuisson = modifiedRecette.TempsCuisson,
-
-                Difficulte = modifiedRecette.Difficulte,
-
-                Photo = modifiedRecette.Photo,
-
-                Createur = modifiedRecette.Createur
+                Id = updated.Id,
+                Nom = updated.Nom,
+                TempsPreparation = updated.TempsPreparation,
+                TempsCuisson = updated.TempsCuisson,
+                Difficulte = updated.Difficulte,
+                Photo = updated.Photo,
+                Createur = updated.Createur
             };
 
             return Ok(response);
         }
 
-        /// <summary>
-        /// Supprime une recette par son identifiant.
-        /// </summary>
-        /// <param name="id">Identifiant de la recette à supprimer.</param>
-        /// <returns>
-        /// Un code 204 si la suppression a réussi, ou 404 si la recette n'existe pas.
-        /// </returns>
-        [HttpDelete("{id}")]
+        /// <summary>Supprime une recette. (Admin)</summary>
+        [HttpDelete("{id:int}")]
+        [Authorize(Roles = "Administrateur")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteRecette([FromRoute] int id)
         {
-            var success = await _recetteService.DeleteRecetteAsync(id);
-            return success ? NoContent() : NotFound();
+            var ok = await _recetteService.DeleteRecetteAsync(id);
+            if (!ok)
+                return Problem(statusCode: 404, title: "Introuvable", detail: $"Recette {id} inexistante.");
+            return NoContent();
         }
     }
 }

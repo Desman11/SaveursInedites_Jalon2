@@ -17,6 +17,7 @@ namespace SaveursInedites_Jalon2.Services
         Task<Utilisateur> AddUtilisateurAsync(Utilisateur newUtilisateur);
         Task<Utilisateur> ModifyUtilisateurAsync(Utilisateur updateUtilisateur);
         Task<bool> DeleteUtilisateurAsync(int id);
+        Task<Utilisateur?> GetUtilisateurByIdentifiantAsync(string identifiant);
 
         // Ingrédients
         Task<IEnumerable<Ingredient>> GetAllIngredientsAsync();
