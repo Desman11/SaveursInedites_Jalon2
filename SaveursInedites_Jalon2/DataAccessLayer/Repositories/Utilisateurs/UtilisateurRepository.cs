@@ -34,9 +34,9 @@ namespace SaveursInedites_Jalon2.DataAccessLayer.Repositories.Utilisateurs
             string query = string.Empty;
 
             if (_dbSession.DatabaseProviderName == DatabaseProviderName.MariaDB || _dbSession.DatabaseProviderName == DatabaseProviderName.MySQL)
-                query = $"INSERT INTO {UTILISATEUR_TABLE}(nom, email, password) VALUES(@Nom, @Email, @Password); Select LAST_INSERT_ID()";
+                query = $"INSERT INTO {UTILISATEUR_TABLE}(identifiant, email, password, role_id) VALUES(@Identifiant, @Email, @Password, @Role_id); Select LAST_INSERT_ID()";
             else if (_dbSession.DatabaseProviderName == DatabaseProviderName.PostgreSQL)
-                query = $"INSERT INTO {UTILISATEUR_TABLE}(nom, email, password) VALUES(@Nom, @Email, @Password) RETURNING id";
+                query = $"INSERT INTO {UTILISATEUR_TABLE}(identifiant, email, password, role_id) VALUES(@Identifiant, @Email, @Password, @Role_id) RETURNING id";
 
             int lastId = await _dbSession.Connection.ExecuteScalarAsync<int>(query, utilisateur);
             utilisateur.Id = lastId;
@@ -45,7 +45,7 @@ namespace SaveursInedites_Jalon2.DataAccessLayer.Repositories.Utilisateurs
 
         public async Task<Utilisateur> ModifyAsync(Utilisateur utilisateur)
         {
-            string query = $"UPDATE {UTILISATEUR_TABLE} SET nom = @Nom, email = @Email, password = @Password WHERE id = @Id";
+            string query = $"UPDATE {UTILISATEUR_TABLE} SET identifiant = @Identifiant, email = @Email, password = @Password WHERE id = @Id";
             int numLine = await _dbSession.Connection.ExecuteAsync(query, utilisateur);
             return numLine == 0 ? null : utilisateur;
         }

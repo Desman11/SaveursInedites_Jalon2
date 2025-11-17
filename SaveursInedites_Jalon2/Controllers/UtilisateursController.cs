@@ -5,6 +5,7 @@ using SaveursInedites_Jalon2.Domain.BO;
 using SaveursInedites_Jalon2.Domain.DTO.DTOIn;
 using SaveursInedites_Jalon2.Domain.DTO.DTOOut;
 using SaveursInedites_Jalon2.Services;
+using BCrypt.Net;
 
 namespace SaveursInedites_Jalon2.Controllers
 {
@@ -30,7 +31,7 @@ namespace SaveursInedites_Jalon2.Controllers
                 Id = a.Id,
                 Identifiant = a.Identifiant,
                 Email = a.Email,
-                Role = a.Role,
+                Role_id = a.Role_id,
                 Password = a.Password
 
             });
@@ -53,7 +54,7 @@ namespace SaveursInedites_Jalon2.Controllers
                 Id = utilisateur.Id,
                 Identifiant = utilisateur.Identifiant,
                 Email = utilisateur.Email,
-                Role = utilisateur.Role,
+                Role_id = utilisateur.Role_id,
                 Password = utilisateur.Password
             };
 
@@ -67,11 +68,15 @@ namespace SaveursInedites_Jalon2.Controllers
         {
             validator.ValidateAndThrow(request);
 
+            // Hashage du mot de passe avant de créer l'entité
+            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(request.Password);
+
             Utilisateur utilisateur = new()
             {
                 Email = request.Email,
                 Identifiant = request.Identifiant,
-                Password = request.Password,
+                Password = hashedPassword,
+                Role_id = request.Role_id
                 
             };
 
@@ -86,7 +91,7 @@ namespace SaveursInedites_Jalon2.Controllers
                 Identifiant = newUtilisateur.Identifiant,
                 Email = newUtilisateur.Email,
                 Password = newUtilisateur.Password,
-                Role = newUtilisateur.Role
+                Role_id = newUtilisateur.Role_id
             };
 
             return CreatedAtAction(nameof(GetUtilisateurById), new { id = response.Id }, response);
@@ -111,7 +116,7 @@ namespace SaveursInedites_Jalon2.Controllers
                 Identifiant = request.Identifiant,
                 Email = request.Email,
                 Password = request.Password,
-                Role = request.Role
+                Role_id = request.Role_id   
             };
 
             var modifiedUtilisateur = await _saveursService.ModifyUtilisateurAsync(utilisateur);
@@ -124,7 +129,7 @@ namespace SaveursInedites_Jalon2.Controllers
                 Id = modifiedUtilisateur.Id,
                 Identifiant = modifiedUtilisateur.Identifiant,
                 Email = modifiedUtilisateur.Email,
-                Role = modifiedUtilisateur.Role 
+                Role_id = modifiedUtilisateur.Role_id
             };
 
             return Ok(response);

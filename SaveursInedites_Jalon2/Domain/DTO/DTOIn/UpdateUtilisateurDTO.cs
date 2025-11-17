@@ -19,7 +19,7 @@ namespace SaveursInedites_Jalon2.Domain.DTO.DTOIn
        
         public string Password { get; set; } 
 
-        public int Role { get; set; }
+        public int Role_id { get; set; }
     }
 
     /// <summary>

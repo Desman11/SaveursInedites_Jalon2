@@ -16,6 +16,6 @@
 
         public int Createur { get; set; }
 
-        public int Role { get; set; }
+        public int Role{ get; set; }
     }
 }

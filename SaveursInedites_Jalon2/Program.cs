@@ -90,7 +90,8 @@ namespace SaveursInedites_Jalon2
 
                     ValidIssuer = jwtSettings.Issuer, // Émetteur attendu.
                     ValidAudience = jwtSettings.Audience, // Audience attendue.
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Secret)), // Clé secrète utilisée pour signer le token.
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Secret)), 
+                    // Clé secrète utilisée pour signer le token.
 
                     RoleClaimType = ClaimTypes.Role // Permet d'utiliser les rôles dans les contrôleurs via [Authorize(Roles = "...")].
                 };
