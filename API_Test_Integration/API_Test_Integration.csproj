@@ -1,53 +1,85 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+	<!-- Projet .NET classique basé sur le SDK "Microsoft.NET.Sdk" (projet de tests ici) -->
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+	<PropertyGroup>
+		<!-- Cible le framework .NET 8 -->
+		<TargetFramework>net8.0</TargetFramework>
 
-    <IsPackable>false</IsPackable>
-    <IsTestProject>true</IsTestProject>
-  </PropertyGroup>
+		<!-- Ajoute automatiquement les using de base (System, System.Linq, etc.) -->
+		<ImplicitUsings>enable</ImplicitUsings>
 
-  <ItemGroup>
-    <Content Include="appsettings.Integrations.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-  </ItemGroup>
+		<!-- Active les références nullables (analyse des null à la compilation) -->
+		<Nullable>enable</Nullable>
 
-  <ItemGroup>
-    <PackageReference Include="coverlet.collector" Version="6.0.4">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.*" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.0" />
-    <PackageReference Include="Npgsql" Version="10.0.0-rc.1" />
-    <PackageReference Include="xunit" Version="2.9.3" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-  </ItemGroup>
+		<!-- Indique que ce projet ne sera pas packagé en NuGet -->
+		<IsPackable>false</IsPackable>
 
-  <ItemGroup>
-    <ProjectReference Include="..\SaveursInedites_Jalon2\SaveursInedites_Jalon2.csproj" />
-  </ItemGroup>
+		<!-- Indique qu’il s’agit d’un projet de tests -->
+		<IsTestProject>true</IsTestProject>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Using Include="Xunit" />
-  </ItemGroup>
+	<ItemGroup>
+		<!-- Ajoute le fichier de configuration spécifique aux tests d’intégration -->
+		<Content Include="appsettings.Integrations.json">
+			<!-- Copie le fichier dans le répertoire de sortie à chaque build si modifié -->
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<!-- Ne pas inclure ce fichier dans un éventuel single-file publish -->
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<!-- Copie aussi le fichier lors d’un publish -->
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+	</ItemGroup>
 
-  <ItemGroup>
-    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
-  </ItemGroup>
+	<ItemGroup>
+		<!-- Collecteur de couverture de code (Coverlet) -->
+		<PackageReference Include="coverlet.collector" Version="6.0.4">
+			<!-- Le package est privé au projet de test -->
+			<PrivateAssets>all</PrivateAssets>
+			<!-- Types d’assets inclus -->
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
 
-  <ItemGroup>
-    <None Update="CreateDatabase.sql">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+		<!-- Package pour les tests d’intégration ASP.NET Core -->
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.*" />
+
+		<!-- SDK de test .NET (nécessaire pour exécuter les tests avec dotnet test) -->
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.0" />
+
+		<!-- Provider PostgreSQL pour ADO.NET utilisé dans les tests -->
+		<PackageReference Include="Npgsql" Version="10.0.0-rc.1" />
+
+		<!-- Framework de tests xUnit -->
+		<PackageReference Include="xunit" Version="2.9.3" />
+
+		<!-- Runner xUnit pour l’intégration avec Visual Studio / dotnet test -->
+		<PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
+			<!-- Le runner est privé au projet de test -->
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<!-- Référence au projet principal de l’API (à tester) -->
+		<ProjectReference Include="..\SaveursInedites_Jalon2\SaveursInedites_Jalon2.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<!-- Ajout global du using Xunit dans tous les fichiers de ce projet -->
+		<Using Include="Xunit" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<!-- Service Visual Studio / Test Explorer (GUID standard pour les projets de tests) -->
+		<Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<!-- Script SQL de création de la base de test -->
+		<None Update="CreateDatabase.sql">
+			<!-- Copie le script dans le répertoire de sortie pour qu’il soit accessible aux tests -->
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 
 </Project>

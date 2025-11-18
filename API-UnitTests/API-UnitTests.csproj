@@ -1,41 +1,78 @@
 <Project Sdk="Microsoft.NET.Sdk">
+	<!-- Déclare que ce projet utilise le SDK .NET standard -->
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <RootNamespace>API_UnitTests</RootNamespace>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<!-- Le projet cible .NET 8 -->
 
-    <IsPackable>false</IsPackable>
-    <IsTestProject>true</IsTestProject>
-  </PropertyGroup>
+		<RootNamespace>API_UnitTests</RootNamespace>
+		<!-- Définit le namespace racine généré automatiquement -->
 
-  <ItemGroup>
-    <PackageReference Include="coverlet.collector" Version="6.0.4">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.21" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.0" />
-    <PackageReference Include="Moq" Version="4.20.72" />
-    <PackageReference Include="xunit" Version="2.9.3" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<!-- Active les using implicites (System, System.Linq…) -->
 
-  <ItemGroup>
-    <ProjectReference Include="..\SaveursInedites_Jalon2\SaveursInedites_Jalon2.csproj" />
-  </ItemGroup>
+		<Nullable>enable</Nullable>
+		<!-- Active l’analyse des null (types nullables) -->
 
-  <ItemGroup>
-    <Using Include="Xunit" />
-  </ItemGroup>
+		<IsPackable>false</IsPackable>
+		<!-- Indique que ce projet ne doit pas être packagé en NuGet -->
 
-  <ItemGroup>
-    <Folder Include="BLLTests\" />
-    <Folder Include="DALTests\" />
-  </ItemGroup>
+		<IsTestProject>true</IsTestProject>
+		<!-- Indique qu’il s’agit d’un projet de tests -->
+	</PropertyGroup>
+
+	<ItemGroup>
+		<!-- Ensemble des packages NuGet utilisés dans les tests -->
+
+		<PackageReference Include="coverlet.collector" Version="6.0.4">
+			<!-- Package pour collecter la couverture de code -->
+
+			<PrivateAssets>all</PrivateAssets>
+			<!-- Le package reste interne au projet (non transmissible) -->
+
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<!-- Spécifie les types d’assets que ce package fournit -->
+		</PackageReference>
+
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.21" />
+		<!-- Fournit WebApplicationFactory pour les tests ASP.NET Core -->
+
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.0" />
+		<!-- Nécessaire pour exécuter les tests via dotnet test -->
+
+		<PackageReference Include="Moq" Version="4.20.72" />
+		<!-- Framework de mocking utilisé dans les tests unitaires -->
+
+		<PackageReference Include="xunit" Version="2.9.3" />
+		<!-- Framework de tests xUnit -->
+
+		<PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
+			<!-- Runner xUnit compatible avec Visual Studio et dotnet test -->
+
+			<PrivateAssets>all</PrivateAssets>
+			<!-- Le runner reste privé au projet -->
+
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<!-- Types d’assets utilisables -->
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\SaveursInedites_Jalon2\SaveursInedites_Jalon2.csproj" />
+		<!-- Référence le projet principal afin de tester son code -->
+	</ItemGroup>
+
+	<ItemGroup>
+		<Using Include="Xunit" />
+		<!-- Ajoute automatiquement "using Xunit;" à tous les fichiers du projet -->
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="BLLTests\" />
+		<!-- Dossier logique destiné aux tests de la couche métier -->
+
+		<Folder Include="DALTests\" />
+		<!-- Dossier logique destiné aux tests de la couche d'accès aux données -->
+	</ItemGroup>
 
 </Project>
