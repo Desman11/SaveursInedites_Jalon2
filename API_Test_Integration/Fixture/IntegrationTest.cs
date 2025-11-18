@@ -33,13 +33,12 @@ public abstract class IntegrationTest : IClassFixture<APIWebApplicationFactory>
         // Récupération de la configuration de l’API de test
         _configuration = webApi.Configuration;
 
-        // Recréation de la base de données avant chaque test (optionnel)
+        // Si tu veux recréer la base avant chaque test, tu peux
+        // dé-commenter ces lignes et les déplacer dans chaque test.
         // DownDatabase();
         // UpDatabase();
     }
 
-    // Méthode utilitaire pour se connecter à l’API avec un login/mot de passe.
-    // Elle envoie une requête HTTP POST sur /api/Authentication/Login.
     public async Task Login(string username, string password)
     {
         // Envoi du login/mot de passe au format JSON dans le corps de la requête
@@ -56,15 +55,20 @@ public abstract class IntegrationTest : IClassFixture<APIWebApplicationFactory>
             var JwtDTO = await httpResponse.Content.ReadFromJsonAsync<JwtDTO>();
 
             // Ajout du token JWT dans les en-têtes Authorization du HttpClient
-            // pour que les prochains appels soient authentifiés.
-            httpClient.DefaultRequestHeaders.Authorization = new("Bearer", JwtDTO.Token);
+            httpClient.DefaultRequestHeaders.Authorization = new("Bearer", JwtDTO!.Token);
         }
         else
         {
-            // En cas d’échec, le test échoue explicitement
-            Assert.Fail("Impossible de se connecter avec {username} , {password}");
+            // Lecture du contenu de la réponse pour le diagnostic
+            var body = await httpResponse.Content.ReadAsStringAsync();
+
+            Assert.Fail(
+                $"Impossible de se connecter avec {username} , {password}. " +
+                $"StatusCode = {(int)httpResponse.StatusCode} ({httpResponse.StatusCode}), " +
+                $"Body = {body}");
         }
     }
+
 
     // Méthode utilitaire pour “se déconnecter” :
     // on supprime le header Authorization du HttpClient.
@@ -113,7 +117,7 @@ public abstract class IntegrationTest : IClassFixture<APIWebApplicationFactory>
             con.Open();
 
             // Requête SQL qui supprime le schéma public et tout ce qu’il contient
-            string requeteSQL = "DROP SCHEMA if exists public cascade;";
+            string requeteSQL = "DROP SCHEMA IF EXISTS public CASCADE;";
 
             var commande = con.CreateCommand();
             commande.CommandText = requeteSQL;

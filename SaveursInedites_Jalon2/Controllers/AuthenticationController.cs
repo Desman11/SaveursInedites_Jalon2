@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using SaveursInedites_Jalon2.Domain.DTO.DTOIn;
 using SaveursInedites_Jalon2.Domain.DTO.DTOOut;
 using SaveursInedites_Jalon2.Services;
-using BCrypt.Net;
 using SaveursInedites_Jalon2.Domain.BO;
 
 namespace SaveursInedites_Jalon2.Controllers
@@ -20,9 +19,6 @@ namespace SaveursInedites_Jalon2.Controllers
         private readonly IJwtTokenService _jwtTokenService;
         private readonly ISaveursService _saveursService;
 
-        /// <summary>
-        /// Initialise une nouvelle instance du contrôleur <see cref="AuthenticationController"/>.
-        /// </summary>
         public AuthenticationController(
             IJwtTokenService jwtTokenService,
             ISaveursService saveursService)
@@ -43,19 +39,18 @@ namespace SaveursInedites_Jalon2.Controllers
             validator.ValidateAndThrow(request);
 
             // 1) Recherche de l'utilisateur par identifiant (username)
-            // Ici, on considère que LoginDTO.Username correspond à la colonne "identifiant"
-            Utilisateur? utilisateur = await _saveursService
-                .GetUtilisateurByIdentifiantAsync(request.Username);
+            Utilisateur? utilisateur =
+                await _saveursService.GetUtilisateurByIdentifiantAsync(request.Username);
 
-            if (utilisateur is null)
-                throw new UnauthorizedAccessException("Nom d'utilisateur ou mot de passe incorrect.");
+            // 2) Si utilisateur inexistant ou mot de passe invalide => 401
+            if (utilisateur is null ||
+                !BCrypt.Net.BCrypt.Verify(request.Password, utilisateur.Password))
+            {
+                // 401 Unauthorized
+                return Unauthorized("Nom d'utilisateur ou mot de passe incorrect.");
+            }
 
-            // 2) Vérification du mot de passe (hashé avec BCrypt à la création)
-            bool passwordValide = BCrypt.Net.BCrypt.Verify(request.Password, utilisateur.Password);
-            if (!passwordValide)
-                throw new UnauthorizedAccessException("Nom d'utilisateur ou mot de passe incorrect.");
-
-            // 3) Détermination du rôle à partir de Role_id (adapter selon ta table rôles)
+            // 3) Détermination du rôle à partir de Role_id
             string role = utilisateur.Role_id switch
             {
                 1 => "Administrateur",

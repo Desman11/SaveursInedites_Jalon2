@@ -143,5 +143,6 @@ namespace SaveursInedites_Jalon2.Controllers
             var success = await _saveursService.DeleteUtilisateurAsync(id);
             return success ? NoContent() : NotFound();
         }
+
     }
 }
